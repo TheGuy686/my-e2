@@ -1,6 +1,8 @@
-// import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:my_e2/pages/Dashbaord.dart';
 
 class SplashScreen extends StatefulWidget {
   final TextStyle styleTextUnderTheLoader = TextStyle(
@@ -23,12 +25,14 @@ class _SplashScreenState extends State<SplashScreen> {
   _loadWidget() async {
     var _duration = Duration(seconds: 5);
 
-    //return Timer (_duration, navigationPage);
+    return Timer(_duration, navigationPage);
   }
 
   void navigationPage() {
-    //   Navigator.pushReplacement(context,
-    //       MaterialPageRoute(builder: (BuildContext context) => AfterSplash()));
+    debugPrint('movieTitle: here we would have navigated');
+
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
   }
 
   @override
