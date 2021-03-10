@@ -4,20 +4,20 @@ class Profile {
   String avatar;
   String alias;
   int owns;
-  String tiles;
-  int netWorth;
+  int tiles;
+  double netWorth;
   double netProfit;
   double netProfitPercent;
-  List<Property> properties;
+  List<Property> properties = [];
 
   Profile(
-      {this.avatar,
-      this.alias,
-      this.owns,
-      this.tiles,
-      this.netWorth,
-      this.netProfit,
-      this.netProfitPercent});
+      {this.avatar = 'na',
+      this.alias = 'na',
+      this.owns = 0,
+      this.tiles = 0,
+      this.netWorth = 0,
+      this.netProfit = 0,
+      this.netProfitPercent = 0});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     //List<Property> properties = List<Property>.from(

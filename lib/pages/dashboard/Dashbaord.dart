@@ -2,65 +2,31 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
 
 import 'models/Profile.dart';
 
-Future fetchProfile() async {
+Future fetchProfile(updateProfile) async {
   try {
+    print('doing request');
     final response =
         await http.get(Uri.https('511fa11bd66a.ap.ngrok.io', '/get-profile'));
 
-    debugPrint('                                       ');
-    debugPrint('                                       ');
-    debugPrint('                                       ');
-    debugPrint('                                       ');
+    updateProfile(Profile.fromJson(jsonDecode(response.body)));
 
-    debugPrint('FROM JSON: ');
-
-    var res = jsonDecode(response.body);
-
-    inspect(res['info']);
-
-    var prop = Profile.fromJson(jsonDecode(response.body));
-
-    print('ALIAS: ' + prop.alias);
-
-    debugPrint('                                       ');
-    debugPrint('                                       ');
-    debugPrint('                                       ');
-    debugPrint('                                       ');
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      //return Profile.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
+    // if (response.statusCode == 200) {
+    //   // If the server did return a 200 OK response,
+    //   // then parse the JSON.
+    // } else {
+    //   // If the server did not return a 200 OK response,
+    //   // then throw an exception.
+    //   throw Exception('Failed to load album');
+    // }
   } catch (e) {
     inspect(e);
-    //return Profile.fromJson(jsonDecode(response.body));
   }
 }
-
-// class Profile {
-//   final int userId;
-//   final int id;
-//   final String title;
-
-//   Profile({this.userId, this.id, this.title});
-
-//   factory Profile.fromJson(Map<String, dynamic> json) {
-//     return Profile(
-//       userId: json['userId'],
-//       id: json['id'],
-//       title: json['title'],
-//     );
-//   }
-// }
 
 class Dashboard extends StatefulWidget {
   @override
@@ -69,14 +35,18 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   Future futureProfile;
+  Profile prof = Profile();
 
   @override
   void initState() {
     super.initState();
+  }
 
-    // setState(() {
-    //   _imageWidget = Image.memory(br.encodeJpg(toAdjust));
-    // });
+  void _updateProfile(Profile newProf) {
+    print('UPDATED PROFILE FROM HERE');
+    setState(() {
+      prof = newProf;
+    });
   }
 
   @override
@@ -88,7 +58,7 @@ class _DashboardState extends State<Dashboard> {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          futureProfile = fetchProfile();
+          futureProfile = fetchProfile(_updateProfile);
         },
         child: Icon(Icons.navigation),
         backgroundColor: Colors.green,
@@ -103,15 +73,57 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   Column(
                     children: [
-                      Text('TheGuy'),
                       Avatar(),
                     ],
                   ),
                   Card(
                     child: Container(
-                      color: Colors.greenAccent,
-                      width: 200,
-                      height: 300,
+                      child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [Text('User: ' + prof.alias)],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Owns: ' +
+                                        prof.owns.toString() +
+                                        ' properties',
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('Tiles: ' + prof.tiles.toString()),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Net Worth: E\$' + prof.netWorth.toString(),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Net Profit: E\$' +
+                                        prof.netProfit.toString() +
+                                        ' (' +
+                                        prof.netProfitPercent.toString() +
+                                        '%)',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                 ],
