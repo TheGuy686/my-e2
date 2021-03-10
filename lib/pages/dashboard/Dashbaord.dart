@@ -4,10 +4,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
 
+import 'models/Profile.dart';
+
 Future fetchProfile() async {
   try {
     final response =
-        await http.get(Uri.https('a52dc2b9cb64.ap.ngrok.io', '/get-profile'));
+        await http.get(Uri.https('511fa11bd66a.ap.ngrok.io', '/get-profile'));
 
     debugPrint('                                       ');
     debugPrint('                                       ');
@@ -16,7 +18,13 @@ Future fetchProfile() async {
 
     debugPrint('FROM JSON: ');
 
-    inspect(jsonDecode(response.body));
+    var res = jsonDecode(response.body);
+
+    inspect(res['info']);
+
+    var prop = Profile.fromJson(jsonDecode(response.body));
+
+    print('ALIAS: ' + prop.alias);
 
     debugPrint('                                       ');
     debugPrint('                                       ');
@@ -73,11 +81,6 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    final avatarSize = screenWidth * 0.2;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashbaord'),
@@ -93,11 +96,27 @@ class _DashboardState extends State<Dashboard> {
       body: Container(
         child: Column(
           children: [
-            Row(
-              children: [
-                Avatar(),
-              ],
-            ),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text('TheGuy'),
+                      Avatar(),
+                    ],
+                  ),
+                  Card(
+                    child: Container(
+                      color: Colors.greenAccent,
+                      width: 200,
+                      height: 300,
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

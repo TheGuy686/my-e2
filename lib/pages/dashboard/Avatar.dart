@@ -27,39 +27,40 @@ class _AvatarState extends State<Avatar> {
 
     final avatarSize = screenWidth * 0.2;
 
-    return Container(
-      width: avatarSize,
-      height: avatarSize,
-      decoration: new BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 4,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Center(
-        child: Container(
-          width: avatarSize * 0.95,
-          height: avatarSize * 0.95,
+    return Stack(
+      children: [
+        Container(
+          width: avatarSize * 1.1,
+          height: avatarSize * 1.2,
           decoration: new BoxDecoration(
-            color: Colors.grey[300],
+            color: Colors.white,
             shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 3,
+                blurRadius: 4,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
-          child: SvgPicture.network(
-            _avatar,
-            semanticsLabel: 'Avatar',
-            placeholderBuilder: (BuildContext context) => Container(
-              padding: const EdgeInsets.all(3.0),
-              child: const CircularProgressIndicator(),
+        ),
+        Container(
+          width: avatarSize * 1.1,
+          height: avatarSize * 1.4,
+          child: Center(
+            child: SvgPicture.network(
+              _avatar,
+              semanticsLabel: 'Avatar',
+              width: avatarSize,
+              placeholderBuilder: (BuildContext context) => Container(
+                padding: const EdgeInsets.all(3.0),
+                child: const CircularProgressIndicator(),
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
