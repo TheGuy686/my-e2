@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:my_e2/pages/dashboard/Avatar.dart';
 
 Future fetchProfile() async {
   try {
     final response =
-        await http.get(Uri.https('28a51d8e96f7.ap.ngrok.io', '/get-profile'));
+        await http.get(Uri.https('a52dc2b9cb64.ap.ngrok.io', '/get-profile'));
 
     debugPrint('                                       ');
     debugPrint('                                       ');
@@ -37,21 +38,21 @@ Future fetchProfile() async {
   }
 }
 
-class Profile {
-  final int userId;
-  final int id;
-  final String title;
+// class Profile {
+//   final int userId;
+//   final int id;
+//   final String title;
 
-  Profile({this.userId, this.id, this.title});
+//   Profile({this.userId, this.id, this.title});
 
-  factory Profile.fromJson(Map<String, dynamic> json) {
-    return Profile(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-    );
-  }
-}
+//   factory Profile.fromJson(Map<String, dynamic> json) {
+//     return Profile(
+//       userId: json['userId'],
+//       id: json['id'],
+//       title: json['title'],
+//     );
+//   }
+// }
 
 class Dashboard extends StatefulWidget {
   @override
@@ -64,10 +65,19 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+
+    // setState(() {
+    //   _imageWidget = Image.memory(br.encodeJpg(toAdjust));
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final avatarSize = screenWidth * 0.2;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashbaord'),
@@ -81,10 +91,14 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Colors.green,
       ),
       body: Container(
-        child: Center(
-          child: Text(
-            'hello again',
-          ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Avatar(),
+              ],
+            ),
+          ],
         ),
       ),
     );
