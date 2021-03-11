@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'Property.dart';
 
 class Profile {
@@ -17,19 +20,32 @@ class Profile {
       this.tiles = 0,
       this.netWorth = 0,
       this.netProfit = 0,
-      this.netProfitPercent = 0});
+      this.netProfitPercent = 0,
+      properties});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
-    //List<Property> properties = List<Property>.from(
-    //    json['properties'].map((model) => Property.fromJson(model)));
+    //List<String, dynamic> properties = json["properties"];
 
-    return Profile(
-        avatar: json['info']['avatar'],
-        alias: json['info']['alias'],
-        owns: json['info']['owns'],
-        tiles: json['info']['tiles'],
-        netWorth: json['info']['netWorth'],
-        netProfit: json['info']['netProfit'],
-        netProfitPercent: json['info']['netProfitPercent']);
+    //List<Property> properties =
+    //     List<Property>.from(json['properties'].map((model) => (Property())));
+
+    List<Property> props = [];
+
+    Profile prof = Profile(
+      avatar: json['info']['avatar'],
+      alias: json['info']['alias'],
+      owns: json['info']['owns'],
+      tiles: json['info']['tiles'],
+      netWorth: json['info']['networth'],
+      netProfit: json['info']['netProfit'],
+      netProfitPercent: json['info']['netProfitPercent'],
+    );
+
+    json['properties']
+        .forEach((k, v) => prof.properties.add(Property.fromJson(v)));
+
+    inspect(prof);
+
+    return prof;
   }
 }

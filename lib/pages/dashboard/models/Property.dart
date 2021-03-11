@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
+
 import 'Location.dart';
 
 class Property {
@@ -7,7 +11,7 @@ class Property {
   String description;
   String price;
   String tradeValue;
-  String tiles;
+  int tiles;
   Location location;
 
   Property(
@@ -20,17 +24,17 @@ class Property {
       this.tiles,
       this.location});
 
-  factory Property.fromJson(Map<String, dynamic> json) {
+  factory Property.fromJson(Map<dynamic, dynamic> json) {
     // Iterable l = json.decode(response.body);
 
     return Property(
         id: json['id'],
         thumbnail: json['thumbnail'],
         link: json['link'],
-        description: json['description'],
+        description: json['desc'],
         price: json['price'],
         tradeValue: json['tradeValue'],
         tiles: json['tiles'],
-        location: json['location']);
+        location: Location.fromJson(json['loc']));
   }
 }

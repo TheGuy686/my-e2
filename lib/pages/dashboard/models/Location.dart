@@ -1,7 +1,7 @@
 class Location {
   String location;
-  double long;
-  double lat;
+  String long;
+  String lat;
 
   Location({this.long, this.lat, this.location});
 
