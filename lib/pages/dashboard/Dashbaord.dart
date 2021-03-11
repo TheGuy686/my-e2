@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
 import 'package:my_e2/pages/dashboard/models/Property.dart';
+import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
 
 import 'models/Profile.dart';
 
@@ -47,13 +48,13 @@ class _DashboardState extends State<Dashboard> {
     print('UPDATED PROFILE FROM HERE');
     setState(() {
       prof = newProf;
-
-      inspect(prof);
     });
   }
 
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
+
+  final e2Cur = "E\$";
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +113,8 @@ class _DashboardState extends State<Dashboard> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Net Worth: E\$' + prof.netWorth.toString(),
+                                  'Net Worth: $e2Cur' +
+                                      prof.netWorth.toString(),
                                 ),
                               ],
                             ),
@@ -120,7 +122,7 @@ class _DashboardState extends State<Dashboard> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Net Profit: E\$' +
+                                  'Net Profit: $e2Cur' +
                                       prof.netProfit.toString() +
                                       ' (' +
                                       prof.netProfitPercent.toString() +
@@ -144,11 +146,57 @@ class _DashboardState extends State<Dashboard> {
                 padding: EdgeInsets.all(24),
                 itemCount: prof.properties.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    color: Colors.amber,
-                    child: Center(
-                      child: Text(
-                        prof.properties[index].description,
+                  final prop = prof.properties[index];
+                  inspect(prop);
+                  return GestureDetector(
+                    onTap: () => {print('clicked')},
+                    child: Card(
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(4.5),
+                              topRight: Radius.circular(4.5),
+                              bottomLeft: Radius.zero,
+                              bottomRight: Radius.zero,
+                            ),
+                            child: Image.network(
+                              prop.thumbnail,
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              height: 100,
+                            ),
+                          ),
+                          Container(
+                            color: Colors.orange,
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                child: Text(
+                                  prop.description,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text('Tiles: ' + prop.tiles.toString()),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text("Price: $e2Cur" +
+                                  prop.price.toString() +
+                                  " (" +
+                                  prop.tradeValue.toString() +
+                                  ")"),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   );
