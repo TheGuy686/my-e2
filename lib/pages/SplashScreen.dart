@@ -29,8 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() {
-    debugPrint('movieTitle: here we would have navigated');
-
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
   }

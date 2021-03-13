@@ -13,7 +13,7 @@ Future fetchProfile(updateProfile) async {
   try {
     print('doing request');
     final response =
-        await http.get(Uri.https('b4502133dca6.ap.ngrok.io', '/get-profile'));
+        await http.get(Uri.https('23af369acba3.ap.ngrok.io', '/get-profile'));
 
     updateProfile(Profile.fromJson(jsonDecode(response.body)));
 
@@ -51,13 +51,15 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
-
   final e2Cur = "E\$";
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    double bgOpacity = 0.15;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashbaord'),
@@ -70,141 +72,236 @@ class _DashboardState extends State<Dashboard> {
         child: Icon(Icons.navigation),
         backgroundColor: Colors.green,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
+      body: Stack(
+        children: [
+          Positioned(
+            left: -(screenWidth * 1.05),
+            top: -(screenWidth),
+            child: Transform.rotate(
+              angle: 158.9,
+              child: Opacity(
+                opacity: bgOpacity,
+                child: Image(
+                  image: AssetImage('lib/assets/earth2-blue.png'),
+                  width: 1000,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: -(screenWidth / 5),
+            top: (screenHeight * 0.25),
+            child: Transform.rotate(
+              angle: 25.2,
+              child: Opacity(
+                opacity: bgOpacity,
+                child: Image(
+                  image: AssetImage('lib/assets/earth2-blue.png'),
+                  width: 1000,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(5, 11, 5, 8),
+            child: CustomScrollView(
+              primary: false,
+              slivers: <Widget>[
+                //SliverAppBar()
+                SliverToBoxAdapter(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Avatar(),
+                      Card(
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  prof.alias,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 23,
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Owns ',
+                                    style: TextStyle(color: Colors.black),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: prof.owns.toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      TextSpan(text: ' properties'),
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Made up of ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: prof.tiles.toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      TextSpan(text: ' tiles'),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  Card(
-                    child: Container(
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    child: Card(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                        padding: EdgeInsets.all(10),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [Text('User: ' + prof.alias)],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Owns: ' +
-                                      prof.owns.toString() +
-                                      ' properties',
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('Tiles: ' + prof.tiles.toString()),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Net Worth: $e2Cur' +
-                                      prof.netWorth.toString(),
+                            RichText(
+                              text: TextSpan(
+                                text: 'Net Worth ',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.5,
                                 ),
-                              ],
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text:
+                                        '${e2Cur} ${prof.netWorth.toString()}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Net Profit: $e2Cur' +
-                                      prof.netProfit.toString() +
-                                      ' (' +
-                                      prof.netProfitPercent.toString() +
-                                      '%)',
+                            RichText(
+                              text: TextSpan(
+                                text: 'Property Value Increase ',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.5,
                                 ),
-                              ],
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text:
+                                        '${e2Cur} ${prof.netProfit.toString()} (${prof.netProfitPercent.toString()}%)',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
                 ),
-                padding: EdgeInsets.all(24),
-                itemCount: prof.properties.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final prop = prof.properties[index];
-                  inspect(prop);
-                  return GestureDetector(
-                    onTap: () => {print('clicked')},
-                    child: Card(
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4.5),
-                              topRight: Radius.circular(4.5),
-                              bottomLeft: Radius.zero,
-                              bottomRight: Radius.zero,
-                            ),
-                            child: Image.network(
-                              prop.thumbnail,
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              height: 100,
-                            ),
-                          ),
-                          Container(
-                            color: Colors.orange,
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                                child: Text(
-                                  prop.description,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final prop = prof.properties[index];
+                      //   inspect(prop);
+                      return GestureDetector(
+                        onTap: () => {print('clicked')},
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(6, 6, 6, 6),
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(4.5),
+                                    topRight: Radius.circular(4.5),
+                                    bottomLeft: Radius.zero,
+                                    bottomRight: Radius.zero,
+                                  ),
+                                  child: Image.network(
+                                    prop.thumbnail,
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                    height: 100,
                                   ),
                                 ),
-                              ),
+                                Container(
+                                  color: Colors.orange,
+                                  child: Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                      child: Text(
+                                        prop.description,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Tiles: ' + prop.tiles.toString()),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Price: $e2Cur" +
+                                        prop.price.toString() +
+                                        " (" +
+                                        prop.tradeValue.toString() +
+                                        ")"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      prop.location.long +
+                                          ', ' +
+                                          prop.location.lat,
+                                    ),
+                                    Icon(
+                                      Icons.audiotrack,
+                                      color: Colors.green,
+                                      size: 20.0,
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              Text('Tiles: ' + prop.tiles.toString()),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Price: $e2Cur" +
-                                  prop.price.toString() +
-                                  " (" +
-                                  prop.tradeValue.toString() +
-                                  ")"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
+                        ),
+                      );
+                    },
+                    childCount: prof.properties.length,
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
