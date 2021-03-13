@@ -40,6 +40,8 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+
+    futureProfile = fetchProfile(_updateProfile);
   }
 
   void _updateProfile(Profile newProf) {
@@ -308,13 +310,6 @@ class _DashboardState extends State<Dashboard> {
                                         Text(
                                           "Price: ${e2Cur}${prop.price.toString()} (${prop.tradeValue.toString()})",
                                           style: giInfoTextStyle,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Price: ${e2Cur}${prop.location.location}',
                                         ),
                                       ],
                                     ),
