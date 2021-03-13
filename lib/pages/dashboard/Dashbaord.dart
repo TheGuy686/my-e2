@@ -45,7 +45,6 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void _updateProfile(Profile newProf) {
-    print('UPDATED PROFILE FROM HERE');
     setState(() {
       prof = newProf;
     });
@@ -59,6 +58,11 @@ class _DashboardState extends State<Dashboard> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     double bgOpacity = 0.15;
+
+    const giInfoTextStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 11,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -107,7 +111,6 @@ class _DashboardState extends State<Dashboard> {
             child: CustomScrollView(
               primary: false,
               slivers: <Widget>[
-                //SliverAppBar()
                 SliverToBoxAdapter(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -217,6 +220,16 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                 ),
+                SliverAppBar(
+                  pinned: true,
+                  snap: false,
+                  floating: true,
+                  expandedHeight: 140.0,
+                  flexibleSpace: const FlexibleSpaceBar(
+                    title: Text('Properties'),
+                    centerTitle: false,
+                  ),
+                ),
                 SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -225,23 +238,62 @@ class _DashboardState extends State<Dashboard> {
                       return GestureDetector(
                         onTap: () => {print('clicked')},
                         child: Card(
+                          elevation: 4,
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(6, 6, 6, 6),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(4.5),
-                                    topRight: Radius.circular(4.5),
-                                    bottomLeft: Radius.zero,
-                                    bottomRight: Radius.zero,
-                                  ),
-                                  child: Image.network(
-                                    prop.thumbnail,
-                                    fit: BoxFit.fill,
-                                    width: double.infinity,
-                                    height: 100,
-                                  ),
+                                Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(4.5),
+                                        topRight: Radius.circular(4.5),
+                                        bottomLeft: Radius.zero,
+                                        bottomRight: Radius.zero,
+                                      ),
+                                      child: Image.network(
+                                        prop.thumbnail,
+                                        fit: BoxFit.fill,
+                                        width: double.infinity,
+                                        height: 100,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 3,
+                                      right: 3,
+                                      child: Container(
+                                        //color: Colors.white,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          color: Colors.white,
+                                        ),
+                                        padding: EdgeInsets.all(4),
+                                        child: Row(
+                                          children: [
+                                            RichText(
+                                              text: TextSpan(
+                                                text:
+                                                    '${prop.tiles.toString()} ',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 9,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: ' Tiles',
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                                 Container(
                                   color: Colors.orange,
@@ -258,34 +310,50 @@ class _DashboardState extends State<Dashboard> {
                                     ),
                                   ),
                                 ),
-                                Row(
-                                  children: [
-                                    Text('Tiles: ' + prop.tiles.toString()),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Price: $e2Cur" +
-                                        prop.price.toString() +
-                                        " (" +
-                                        prop.tradeValue.toString() +
-                                        ")"),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      prop.location.long +
-                                          ', ' +
-                                          prop.location.lat,
-                                    ),
-                                    Icon(
-                                      Icons.audiotrack,
-                                      color: Colors.green,
-                                      size: 20.0,
-                                    )
-                                  ],
-                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 5, 5, 4),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width: double.infinity,
+                                        height: 2,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Price: ${e2Cur}${prop.price.toString()} (${prop.tradeValue.toString()})",
+                                            style: giInfoTextStyle,
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Price: ${e2Cur}${prop.price.toString()} (${prop.tradeValue.toString()})",
+                                            style: giInfoTextStyle,
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        height: 2,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '${prop.location.long}, ${prop.location.lat}',
+                                            style: giInfoTextStyle,
+                                          ),
+                                          Icon(
+                                            Icons.location_pin,
+                                            color: Colors.red,
+                                            size: 12.0,
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ),

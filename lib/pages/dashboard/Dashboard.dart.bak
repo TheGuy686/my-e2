@@ -239,3 +239,73 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
+
+
+Card(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(6, 6, 6, 6),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(4.5),
+                                    topRight: Radius.circular(4.5),
+                                    bottomLeft: Radius.zero,
+                                    bottomRight: Radius.zero,
+                                  ),
+                                  child: Image.network(
+                                    prop.thumbnail,
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                    height: 100,
+                                  ),
+                                ),
+                                Container(
+                                  color: Colors.orange,
+                                  child: Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                      child: Text(
+                                        prop.description,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Tiles: ${prop.tiles.toString()}'),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(3),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Price: ${e2Cur}${prop.price.toString()} (${prop.tradeValue.toString()})",
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            prop.location.long +
+                                                ', ' +
+                                                prop.location.lat,
+                                          ),
+                                          Icon(
+                                            Icons.audiotrack,
+                                            color: Colors.green,
+                                            size: 20.0,
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
