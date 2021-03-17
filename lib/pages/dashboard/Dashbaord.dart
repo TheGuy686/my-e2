@@ -5,25 +5,44 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
 
+import 'models/Announcements.dart';
 import 'models/Profile.dart';
 
 Future fetchProfile(updateProfile) async {
   try {
-    print('doing request');
+    //print('doing request');
     final response =
         await http.get(Uri.https('9e5b681106a4.ap.ngrok.io', '/get-profile'));
 
-    updateProfile(Profile.fromJson(jsonDecode(response.body)));
-
-    // if (response.statusCode == 200) {
-    //   // If the server did return a 200 OK response,
-    //   // then parse the JSON.
-    // } else {
-    //   // If the server did not return a 200 OK response,
-    //   // then throw an exception.
-    //   throw Exception('Failed to load album');
-    // }
+    if (response.statusCode == 200) {
+      updateProfile(Profile.fromJson(jsonDecode(response.body)));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   } catch (e) {
+    print('PROFILE ERROR: ');
+    inspect(e);
+  }
+}
+
+Future fetchAnnouncements(updateAnnons) async {
+  try {
+    print('doing request: fetchAnnouncements');
+
+    final response = await http
+        .get(Uri.https('9e5b681106a4.ap.ngrok.io', '/get-announcements'));
+
+    if (response.statusCode == 200) {
+      updateAnnons(Announcements.fromJson(jsonDecode(response.body)));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  } catch (e) {
+    print('ANNONS ERROR: ');
     inspect(e);
   }
 }
@@ -34,14 +53,25 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  Future futureAnnouncements;
   Future futureProfile;
+
   Profile prof = Profile();
+  Announcements annons = Announcements();
 
   @override
   void initState() {
     super.initState();
 
+    futureAnnouncements = fetchAnnouncements(_updateAnnons);
     futureProfile = fetchProfile(_updateProfile);
+  }
+
+  void _updateAnnons(Announcements newAnnons) {
+    print('should have updated the announcements');
+    setState(() {
+      annons = newAnnons;
+    });
   }
 
   void _updateProfile(Profile newProf) {
@@ -51,6 +81,14 @@ class _DashboardState extends State<Dashboard> {
   }
 
   final e2Cur = "E\$";
+
+  Widget _renderAnnons() {
+    if (true) {
+      return Container(child: Text(annons.annons.length.toString()));
+    }
+
+    return Container();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +110,10 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.add_alert),
             tooltip: 'Show Snackbar',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //       const SnackBar(content: Text('This is a snackbar')));
+
+              futureAnnouncements = fetchAnnouncements(_updateAnnons);
             },
           ),
         ],
@@ -109,6 +149,7 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
           ),
+          _renderAnnons(),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 11, 5, 8),
             child: CustomScrollView(

@@ -29,8 +29,6 @@ class Profile {
     //List<Property> properties =
     //     List<Property>.from(json['properties'].map((model) => (Property())));
 
-    List<Property> props = [];
-
     Profile prof = Profile(
       avatar: json['info']['avatar'],
       alias: json['info']['alias'],
