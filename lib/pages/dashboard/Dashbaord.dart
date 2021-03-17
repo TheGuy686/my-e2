@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
 
+import 'AnnouncementTimer.dart';
 import 'models/Announcements.dart';
 import 'models/Profile.dart';
 
@@ -83,11 +86,82 @@ class _DashboardState extends State<Dashboard> {
   final e2Cur = "E\$";
 
   Widget _renderAnnons() {
-    if (true) {
-      return Container(child: Text(annons.annons.length.toString()));
-    }
+    if (annons.annons.length == 0) return Container();
 
-    return Container();
+    return AnnouncementTimer(
+      annon: annons.annons[0],
+    );
+  }
+
+  AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    // display a dialog with the notification details, tap ok to go to another page
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text('Ok'),
+            onPressed: () async {
+              //   Navigator.of(context, rootNavigator: true).pop();
+              //   await Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => SecondScreen(payload),
+              //     ),
+              //   );
+
+              inspect(payload);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  _showNotification() {
+    const String groupKey = 'com.android.example.WORK_EMAIL';
+    const String groupChannelId = 'grouped channel id';
+    const String groupChannelName = 'grouped channel name';
+    const String groupChannelDescription = 'grouped channel description';
+
+    final IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+            onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'your channel id', 'your channel name', 'your channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+            showWhen: false);
+
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    // await flutterLocalNotificationsPlugin.show(
+    //     0, 'plain title', 'plain body', platformChannelSpecifics,
+    //     payload: 'item x');
+
+    // flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    //     onSelectNotification: onDidReceiveLocalNotification);
+
+    // flutterLocalNotificationsPlugin.show(
+    //     3, 'Attention', 'Two messages', platformChannelSpecifics);
   }
 
   @override
@@ -149,68 +223,77 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
           ),
-          _renderAnnons(),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 11, 5, 8),
             child: CustomScrollView(
               primary: false,
               slivers: <Widget>[
                 SliverToBoxAdapter(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Column(
                     children: [
-                      Avatar(),
-                      Card(
-                        elevation: 4,
-                        child: Container(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  prof.alias,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 23,
-                                  ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'Owns ',
-                                    style: TextStyle(color: Colors.black),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: prof.owns.toString(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                      _renderAnnons(),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 3,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Avatar(avatar: prof.avatar),
+                          Card(
+                            elevation: 4,
+                            child: Container(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      prof.alias,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 23,
                                       ),
-                                      TextSpan(text: ' properties'),
-                                    ],
-                                  ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'Made up of ',
-                                    style: TextStyle(
-                                      color: Colors.black,
                                     ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: prof.tiles.toString(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Owns ',
+                                        style: TextStyle(color: Colors.black),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: prof.owns.toString(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(text: ' properties'),
+                                        ],
                                       ),
-                                      TextSpan(text: ' tiles'),
-                                    ],
-                                  ),
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Made up of ',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: prof.tiles.toString(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(text: ' tiles'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),

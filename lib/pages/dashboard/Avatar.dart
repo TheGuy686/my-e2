@@ -3,24 +3,15 @@ import 'dart:developer';
 import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
 
 class Avatar extends StatefulWidget {
+  String avatar = '';
+
+  Avatar({Key key, @required this.avatar}) : super(key: key);
+
   @override
   _AvatarState createState() => _AvatarState();
 }
 
 class _AvatarState extends State<Avatar> {
-  Future futureProfile;
-  String _avatar = '';
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      _avatar =
-          'https://s3-ap-southeast-2.amazonaws.com/prod-app-media.earth2.io/thumbnails/f108dd87-0202-41b4-99b6-b075323f68ea_avatar_31b2e358-e13a-4824-aacc-027ccd507d82.svgxml';
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -50,7 +41,7 @@ class _AvatarState extends State<Avatar> {
           height: avatarSize * 1.4,
           child: Center(
             child: SvgPicture.network(
-              _avatar,
+              widget.avatar,
               semanticsLabel: 'Avatar',
               width: avatarSize,
               placeholderBuilder: (BuildContext context) => Container(

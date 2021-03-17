@@ -6,6 +6,8 @@ class Announcement {
 
   factory Announcement.fromJson(Map<dynamic, dynamic> json) {
     return Announcement(
-        announcement: json['announcement'], endTimestamp: json['endTs']);
+      announcement: json['announcement'],
+      endTimestamp: json['endTs'],
+    );
   }
 }
