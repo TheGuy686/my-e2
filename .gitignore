@@ -9,6 +9,8 @@
 .history
 .svn/
 
+lib/utils/keys.dart
+
 # IntelliJ related
 *.iml
 *.ipr

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_e2/pages/youtube-channel/OfficialChannel.dart';
 
 import 'dashboard/Dashbaord.dart';
 
@@ -19,34 +20,12 @@ class _MainTabNavigationState extends State<MainTabNavigation> {
 
   List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
-    Text(
-      'Index 1: Business',
-    ),
-    Text(
-      'Index 2: School',
-    ),
-    Text(
-      'Index 3: Settings',
-    ),
+    OfficialChannel(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashbaord'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
-            },
-          ),
-        ],
-      ),
-      backgroundColor: Colors.white,
       body: Container(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -57,8 +36,8 @@ class _MainTabNavigationState extends State<MainTabNavigation> {
             label: 'Dashboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.youtube_searched_for_rounded),
+            label: 'Youtube',
           ),
         ],
         currentIndex: _selectedIndex,
