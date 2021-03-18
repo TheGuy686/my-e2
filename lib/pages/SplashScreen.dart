@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:my_e2/pages/Login.dart';
 import 'package:my_e2/pages/MainTabNavigation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   final TextStyle styleTextUnderTheLoader = TextStyle(
@@ -28,11 +31,31 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(_duration, navigationPage);
   }
 
-  void navigationPage() {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => MainTabNavigation()));
+  void navigationPage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      String refreshToken = prefs.getString('refresh_token');
+
+      if (refreshToken != '') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => Login(),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => MainTabNavigation(),
+          ),
+        );
+      }
+    } catch (e) {
+      print('SPLASH SCREEN ERROR');
+      inspect(e);
+    }
   }
 
   @override

@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
-import 'package:my_e2/pages/models/Onboarding.dart';
 import 'package:my_e2/utils/Endpoints.dart';
 
 import 'AnnouncementTimer.dart';
@@ -56,7 +55,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  Future futureLogin;
   Future futureAnnouncements;
   Future futureProfile;
 
@@ -118,15 +116,6 @@ class _DashboardState extends State<Dashboard> {
               //       const SnackBar(content: Text('This is a snackbar')));
 
               //   futureAnnouncements = fetchAnnouncements(_updateAnnons);
-
-              //   futureLogin =
-              //       Onboarding.login('ryanjcooke@hotmail.com', 'Luvmajesus1!*');
-              Onboarding.register(
-                'ryan.cooke@7peakssoftware.com',
-                'Password1!123*',
-                'Ryan',
-                'Something',
-              );
             },
           ),
         ],

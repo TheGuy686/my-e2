@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:my_e2/utils/Endpoints.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../MainTabNavigation.dart';
+
 class Onboarding {
-  static Future login(String username, String password) async {
+  static Future login(
+      BuildContext context, String username, String password) async {
     // prefs.getInt('counter')
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -29,6 +33,15 @@ class Onboarding {
         json.forEach((k, v) async {
           await prefs.setString(k, v);
         });
+
+        print('logged in successfully');
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => MainTabNavigation(),
+          ),
+        );
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
