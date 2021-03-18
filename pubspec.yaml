@@ -28,6 +28,7 @@ dependencies:
   flutter_svg: ^0.19.3
   youtube_player_flutter: ^7.0.0
   flutter_local_notifications: 4.0.1+2
+  shared_preferences: ^2.0.5
 
 
   # The following adds the Cupertino Icons font to your application.

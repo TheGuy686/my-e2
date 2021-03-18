@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
+import 'package:my_e2/pages/models/Onboarding.dart';
+import 'package:my_e2/utils/Endpoints.dart';
 
 import 'AnnouncementTimer.dart';
 import 'models/Announcements.dart';
@@ -13,9 +15,8 @@ import 'models/Profile.dart';
 
 Future fetchProfile(updateProfile) async {
   try {
-    //print('doing request');
-    final response =
-        await http.get(Uri.https('9e5b681106a4.ap.ngrok.io', '/get-profile'));
+    print('doing request');
+    final response = await http.get(Uri.https(API_HOST, '/get-profile'));
 
     if (response.statusCode == 200) {
       updateProfile(Profile.fromJson(jsonDecode(response.body)));
@@ -34,8 +35,7 @@ Future fetchAnnouncements(updateAnnons) async {
   try {
     print('doing request: fetchAnnouncements');
 
-    final response = await http
-        .get(Uri.https('9e5b681106a4.ap.ngrok.io', '/get-announcements'));
+    final response = await http.get(Uri.https(API_HOST, '/get-announcements'));
 
     if (response.statusCode == 200) {
       updateAnnons(Announcements.fromJson(jsonDecode(response.body)));
@@ -56,6 +56,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  Future futureLogin;
   Future futureAnnouncements;
   Future futureProfile;
 
@@ -93,77 +94,6 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
-
-  Future onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {
-    // display a dialog with the notification details, tap ok to go to another page
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: Text(title),
-        content: Text(body),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text('Ok'),
-            onPressed: () async {
-              //   Navigator.of(context, rootNavigator: true).pop();
-              //   await Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => SecondScreen(payload),
-              //     ),
-              //   );
-
-              inspect(payload);
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  _showNotification() {
-    const String groupKey = 'com.android.example.WORK_EMAIL';
-    const String groupChannelId = 'grouped channel id';
-    const String groupChannelName = 'grouped channel name';
-    const String groupChannelDescription = 'grouped channel description';
-
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
-            onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsIOS);
-
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-            'your channel id', 'your channel name', 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            showWhen: false);
-
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    // await flutterLocalNotificationsPlugin.show(
-    //     0, 'plain title', 'plain body', platformChannelSpecifics,
-    //     payload: 'item x');
-
-    // flutterLocalNotificationsPlugin.initialize(initializationSettings,
-    //     onSelectNotification: onDidReceiveLocalNotification);
-
-    // flutterLocalNotificationsPlugin.show(
-    //     3, 'Attention', 'Two messages', platformChannelSpecifics);
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -187,7 +117,16 @@ class _DashboardState extends State<Dashboard> {
               //   ScaffoldMessenger.of(context).showSnackBar(
               //       const SnackBar(content: Text('This is a snackbar')));
 
-              futureAnnouncements = fetchAnnouncements(_updateAnnons);
+              //   futureAnnouncements = fetchAnnouncements(_updateAnnons);
+
+              //   futureLogin =
+              //       Onboarding.login('ryanjcooke@hotmail.com', 'Luvmajesus1!*');
+              Onboarding.register(
+                'ryan.cooke@7peakssoftware.com',
+                'Password1!123*',
+                'Ryan',
+                'Something',
+              );
             },
           ),
         ],
