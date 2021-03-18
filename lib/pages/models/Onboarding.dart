@@ -15,6 +15,8 @@ class Onboarding {
     // prefs.getInt('counter')
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    print(username + ' : ' + password);
+
     try {
       print('doing login');
       final response = await http.post(

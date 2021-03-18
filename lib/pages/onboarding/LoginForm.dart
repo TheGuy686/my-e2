@@ -5,6 +5,8 @@ import 'package:my_e2/pages/models/Onboarding.dart';
 
 class LoginForm extends StatefulWidget {
   dynamic toggelRegister;
+  String user = '';
+  String pass = '';
 
   LoginForm({this.toggelRegister});
 
@@ -80,6 +82,13 @@ class _LoginFormState extends State<LoginForm> {
                                   contentPadding: EdgeInsets.all(16),
                                   fillColor: Colors.white,
                                 ),
+                                onChanged: (text) {
+                                  setState(() {
+                                    print(text);
+                                    widget.user = text;
+                                  });
+                                },
+                                initialValue: 'ryanjcooke@hotmail.com',
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -105,6 +114,12 @@ class _LoginFormState extends State<LoginForm> {
                                   contentPadding: EdgeInsets.all(16),
                                   fillColor: Colors.white,
                                 ),
+                                onChanged: (text) {
+                                  setState(() {
+                                    widget.pass = text;
+                                  });
+                                },
+                                initialValue: '',
                               ),
                               SizedBox(height: 20),
                               Row(
@@ -140,10 +155,11 @@ class _LoginFormState extends State<LoginForm> {
                                     ),
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
+                                        print(widget.user);
                                         Onboarding.login(
                                           context,
-                                          'ryanjcooke@hotmail.com',
-                                          'Luvmajesus1!*',
+                                          widget.user,
+                                          widget.pass,
                                         );
                                       }
                                     },
