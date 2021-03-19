@@ -2,9 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_e2/pages/models/AppState.dart';
 
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter/services.dart';
 
 class AboutTheTeamPage extends StatefulWidget {
   @override
@@ -140,6 +139,38 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
                     fontSize: 16,
                   ),
                 ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Expanded(
+              flex: 10,
+              child: InkWell(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.code),
+                      title: Text('HVY1XYXFD1'),
+                      subtitle: Text(
+                        'Earth2.io discount',
+                      ),
+                    ),
+                    Divider(
+                      thickness: 1,
+                      indent: 5,
+                      endIndent: 5,
+                    )
+                  ],
+                ),
+                onTap: () {
+                  print('HELLo');
+                  Clipboard.setData(
+                    ClipboardData(text: 'HVY1XYXFD1'),
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Copied "HVY1XYXFD1" to clipboard')));
+                },
               ),
             ),
           ),

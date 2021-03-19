@@ -43,8 +43,6 @@ Future fetchProfile(AppState appState, updateProfile) async {
     if (response.statusCode == 200) {
       updateProfile(Profile.fromJson(jsonDecode(response.body)));
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
       inspect(jsonDecode(response.body));
       throw Exception('Failed to load album');
     }
@@ -78,8 +76,6 @@ Future fetchAnnouncements(AppState appState, updateAnnons) async {
     if (response.statusCode == 200) {
       updateAnnons(Announcements.fromJson(jsonDecode(response.body)));
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
       inspect(response.body.toString());
       throw Exception('Failed to load album');
     }
