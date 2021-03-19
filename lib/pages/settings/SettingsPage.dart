@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_e2/pages/Login.dart';
 import 'package:my_e2/pages/models/AppState.dart';
 
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -169,7 +170,19 @@ class _SettingsState extends State<SettingsPage> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await widget.appState.logout();
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => Login(
+                          appState: widget.appState,
+                        ),
+                      ),
+                      ModalRoute.withName('/'),
+                    );
+                  },
                   child: Text(
                     'Logout',
                     style: TextStyle(color: Colors.white),

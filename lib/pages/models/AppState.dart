@@ -31,4 +31,12 @@ class AppState {
       accessToken = prefs.getString('access_token');
     }
   }
+
+  Future logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.remove("id_token");
+    prefs.remove("refresh_token");
+    prefs.remove("access_token");
+  }
 }

@@ -327,7 +327,7 @@ class _DashboardState extends State<Dashboard> {
                 SliverAppBar(
                   pinned: true,
                   snap: false,
-                  floating: true,
+                  floating: false,
                   expandedHeight: 140.0,
                   flexibleSpace: const FlexibleSpaceBar(
                     title: Text('Properties'),
