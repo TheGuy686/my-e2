@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,35 +15,71 @@ import 'AnnouncementTimer.dart';
 import 'models/Announcements.dart';
 import 'models/Profile.dart';
 
-Future fetchProfile(updateProfile) async {
+Future fetchProfile(AppState appState, updateProfile) async {
   try {
-    print('updating profile');
-    final response = await http.get(Uri.https(API_HOST, '/get-profile'));
+    Uri url = Uri.https(
+      API_HOST,
+      '/api/user/profile',
+      {
+        'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
+      },
+    );
+
+    print('fetching profile: ');
+
+    print(url);
+
+    print(appState.idToken);
+
+    final response = await http.get(
+      url,
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ${appState.idToken}',
+        HttpHeaders.contentTypeHeader: "application/json",
+      },
+    );
 
     if (response.statusCode == 200) {
       updateProfile(Profile.fromJson(jsonDecode(response.body)));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
+      inspect(jsonDecode(response.body));
       throw Exception('Failed to load album');
     }
   } catch (e) {
-    print('PROFILE ERROR: ');
-    inspect(e);
+    print('PROFILE ERROR: ' + e.toString());
   }
 }
 
-Future fetchAnnouncements(updateAnnons) async {
+Future fetchAnnouncements(AppState appState, updateAnnons) async {
   try {
+    Uri url = Uri.https(
+      API_HOST,
+      '/api/user/profile',
+      {
+        'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
+      },
+    );
+
     print('doing request: fetchAnnouncements');
 
-    final response = await http.get(Uri.https(API_HOST, '/get-announcements'));
+    print("Basic ${appState.idToken}");
 
+    final response = await http.get(
+      url,
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ${appState.idToken}',
+        HttpHeaders.contentTypeHeader: "application/json",
+      },
+    );
+    inspect(response.body.toString());
     if (response.statusCode == 200) {
       updateAnnons(Announcements.fromJson(jsonDecode(response.body)));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
+      inspect(response.body.toString());
       throw Exception('Failed to load album');
     }
   } catch (e) {
@@ -67,8 +105,8 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
 
-    futureAnnouncements = fetchAnnouncements(_updateAnnons);
-    futureProfile = fetchProfile(_updateProfile);
+    futureAnnouncements = fetchAnnouncements(widget.appState, _updateAnnons);
+    futureProfile = fetchProfile(widget.appState, _updateProfile);
   }
 
   void _updateAnnons(Announcements newAnnons) {
@@ -124,7 +162,7 @@ class _DashboardState extends State<Dashboard> {
               //   ScaffoldMessenger.of(context).showSnackBar(
               //       const SnackBar(content: Text('This is a snackbar')));
 
-              //   futureAnnouncements = fetchAnnouncements(_updateAnnons);
+              futureProfile = fetchProfile(widget.appState, _updateAnnons);
             },
           ),
         ],

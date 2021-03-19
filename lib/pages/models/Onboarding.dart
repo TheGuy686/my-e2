@@ -10,9 +10,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../MainTabNavigation.dart';
 
 class Onboarding {
-  static Future login(dynamic widget, BuildContext context, String username,
-      String password) async {
-    // prefs.getInt('counter')
+  static Future login(
+    dynamic widget,
+    BuildContext context,
+    String username,
+    String password,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print(username + ' : ' + password);
@@ -20,7 +23,7 @@ class Onboarding {
     try {
       print('doing login');
       final response = await http.post(
-        Uri.https(AUTH_HOST, '/api/identity/authenticate'),
+        Uri.https(API_HOST, '/api/identity/authenticate'),
         body: jsonEncode(
           <String, String>{
             'username': username,
@@ -65,7 +68,7 @@ class Onboarding {
     try {
       print('doing register');
       final response = await http.post(
-        Uri.https(AUTH_HOST, '/api/identity/register'),
+        Uri.https(API_HOST, '/api/identity/register'),
         body: jsonEncode(
           <String, String>{
             'username': username,

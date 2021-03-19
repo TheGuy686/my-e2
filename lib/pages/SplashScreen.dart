@@ -32,18 +32,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _loadWidget() async {
-    var _duration = Duration(seconds: 2);
-
-    return Timer(_duration, navigationPage);
+    return Timer(Duration(seconds: 2), navigationPage);
   }
 
   void navigationPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
-      String refreshToken = prefs.getString('refresh_token');
+      widget.appState.idToken = prefs.getString('id_token');
+      widget.appState.accessToken = prefs.getString('access_token');
+      widget.appState.refreshToken = prefs.getString('refresh_token');
 
-      if (refreshToken != '') {
+      if (widget.appState.refreshToken != '') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
