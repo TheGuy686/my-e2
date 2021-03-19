@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:my_e2/pages/onboarding/LoginForm.dart';
 
@@ -36,7 +38,9 @@ class _LoginState extends State<Login> {
         return RegisterForm(toggelRegister: toggelRegister);
 
       return LoginForm(
-          appState: widget.appState, toggelRegister: toggelRegister);
+        appState: widget.appState,
+        toggelRegister: toggelRegister,
+      );
     }
 
     return Scaffold(

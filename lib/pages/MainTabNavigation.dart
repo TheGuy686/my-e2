@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:my_e2/pages/youtube-channel/OfficialChannel.dart';
 
@@ -23,16 +25,18 @@ class _MainTabNavigationState extends State<MainTabNavigation> {
     });
   }
 
-  List<Widget> _widgetOptions = <Widget>[
-    Dashboard(),
-    OfficialChannel(),
-  ];
+  List<Widget> _widgetOptions() {
+    return [
+      Dashboard(appState: widget.appState),
+      OfficialChannel(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetOptions().elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

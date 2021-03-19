@@ -139,6 +139,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
                                         Onboarding.login(
+                                          widget,
                                           context,
                                           'ryanjcooke@hotmail.com',
                                           'Luvmajesus1!*',

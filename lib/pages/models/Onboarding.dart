@@ -10,8 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../MainTabNavigation.dart';
 
 class Onboarding {
-  static Future login(
-      BuildContext context, String username, String password) async {
+  static Future login(dynamic widget, BuildContext context, String username,
+      String password) async {
     // prefs.getInt('counter')
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -41,7 +41,8 @@ class Onboarding {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => MainTabNavigation(),
+            builder: (BuildContext context) =>
+                MainTabNavigation(appState: widget.appState),
           ),
         );
       } else {

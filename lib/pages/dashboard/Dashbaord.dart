@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
+import 'package:my_e2/pages/models/AppState.dart';
 import 'package:my_e2/utils/Endpoints.dart';
 
 import 'AnnouncementTimer.dart';
@@ -14,7 +15,7 @@ import 'models/Profile.dart';
 
 Future fetchProfile(updateProfile) async {
   try {
-    print('doing request');
+    print('updating profile');
     final response = await http.get(Uri.https(API_HOST, '/get-profile'));
 
     if (response.statusCode == 200) {
@@ -50,6 +51,10 @@ Future fetchAnnouncements(updateAnnons) async {
 }
 
 class Dashboard extends StatefulWidget {
+  AppState appState;
+
+  Dashboard({Key key, @required this.appState}) : super(key: key);
+
   @override
   _DashboardState createState() => _DashboardState();
 }
@@ -57,9 +62,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   Future futureAnnouncements;
   Future futureProfile;
-
-  Profile prof = Profile();
-  Announcements annons = Announcements();
 
   @override
   void initState() {
@@ -72,23 +74,30 @@ class _DashboardState extends State<Dashboard> {
   void _updateAnnons(Announcements newAnnons) {
     print('should have updated the announcements');
     setState(() {
-      annons = newAnnons;
+      widget.appState.annons = newAnnons;
     });
   }
 
   void _updateProfile(Profile newProf) {
     setState(() {
-      prof = newProf;
+      widget.appState.prof = newProf;
     });
   }
 
   final e2Cur = "E\$";
 
   Widget _renderAnnons() {
-    if (annons.annons.length == 0) return Container();
+    print('RENDER ANNONS');
+    inspect(widget.appState);
+
+    if (widget.appState.annons.annons.length == 0) return Container();
+
+    print('HERE');
+
+    inspect(widget.appState);
 
     return AnnouncementTimer(
-      annon: annons.annons[0],
+      annon: widget.appState.annons.annons[0],
     );
   }
 
@@ -167,7 +176,7 @@ class _DashboardState extends State<Dashboard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Avatar(avatar: prof.avatar),
+                          Avatar(avatar: widget.appState.prof.avatar),
                           Card(
                             elevation: 4,
                             child: Container(
@@ -178,7 +187,7 @@ class _DashboardState extends State<Dashboard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      prof.alias,
+                                      widget.appState.prof.alias,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 23,
@@ -190,7 +199,8 @@ class _DashboardState extends State<Dashboard> {
                                         style: TextStyle(color: Colors.black),
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: prof.owns.toString(),
+                                            text: widget.appState.prof.owns
+                                                .toString(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -207,7 +217,8 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: prof.tiles.toString(),
+                                            text: widget.appState.prof.tiles
+                                                .toString(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -245,7 +256,7 @@ class _DashboardState extends State<Dashboard> {
                                 children: <TextSpan>[
                                   TextSpan(
                                     text:
-                                        '${e2Cur} ${prof.netWorth.toString()}',
+                                        '${e2Cur} ${widget.appState.prof.netWorth.toString()}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -263,7 +274,7 @@ class _DashboardState extends State<Dashboard> {
                                 children: <TextSpan>[
                                   TextSpan(
                                     text:
-                                        '${e2Cur} ${prof.netProfit.toString()} (${prof.netProfitPercent.toString()}%)',
+                                        '${e2Cur} ${widget.appState.prof.netProfit.toString()} (${widget.appState.prof.netProfitPercent.toString()}%)',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -290,7 +301,7 @@ class _DashboardState extends State<Dashboard> {
                 SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final prop = prof.properties[index];
+                      final prop = widget.appState.prof.properties[index];
                       //   inspect(prop);
                       return GestureDetector(
                         onTap: () => {print('clicked')},
@@ -410,7 +421,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       );
                     },
-                    childCount: prof.properties.length,
+                    childCount: widget.appState.prof.properties.length,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

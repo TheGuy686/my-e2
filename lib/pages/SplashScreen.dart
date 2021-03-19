@@ -15,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 
   AppState appState;
 
-  SplashScreen({Key key, @required this.appState}) : super(key: key);
+  SplashScreen({this.appState});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -54,8 +54,9 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) =>
-                MainTabNavigation(appState: widget.appState),
+            builder: (BuildContext context) {
+              return MainTabNavigation(appState: widget.appState);
+            },
           ),
         );
       }
