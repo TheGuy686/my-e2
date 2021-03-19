@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 
 class AboutTheTeamPage extends StatefulWidget {
@@ -149,7 +149,12 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.code),
+                      leading: SizedBox(
+                        width: 40,
+                        child: Center(
+                          child: Icon(Icons.code),
+                        ),
+                      ),
                       title: Text('HVY1XYXFD1'),
                       subtitle: Text(
                         'Earth2.io discount',
@@ -168,8 +173,44 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
                     ClipboardData(text: 'HVY1XYXFD1'),
                   );
 
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Copied "HVY1XYXFD1" to clipboard')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Copied "HVY1XYXFD1" to clipboard'),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Expanded(
+              flex: 10,
+              child: InkWell(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: SizedBox(
+                        width: 40,
+                        child: Center(
+                          child: Text('FB'),
+                        ),
+                      ),
+                      trailing: Icon(Icons.navigate_next_sharp),
+                      title: Text('Official FB Page (En & ไทย)'),
+                      subtitle: Text(
+                        'Earth2.io discount',
+                      ),
+                    ),
+                    Divider(
+                      thickness: 1,
+                      indent: 5,
+                      endIndent: 5,
+                    )
+                  ],
+                ),
+                onTap: () async {
+                  await launch(
+                      'https://www.facebook.com/groups/3386327578153734');
                 },
               ),
             ),
