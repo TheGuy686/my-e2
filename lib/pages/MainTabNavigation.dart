@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:motion_tab_bar/motiontabbar.dart';
 import 'package:my_e2/pages/youtube-channel/OfficialChannel.dart';
 
 import 'dashboard/Dashbaord.dart';
@@ -38,20 +39,14 @@ class _MainTabNavigationState extends State<MainTabNavigation> {
       body: Container(
         child: _widgetOptions().elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.youtube_searched_for_rounded),
-            label: 'Youtube',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
+      bottomNavigationBar: MotionTabBar(
+        labels: ["Dashboard", "Youtube"],
+        initialSelectedTab: "Dashboard",
+        tabIconColor: Colors.grey,
+        tabSelectedColor: Colors.blue,
+        onTabItemSelected: _onItemTapped,
+        icons: [Icons.account_box, Icons.play_circle_fill_rounded],
+        textStyle: TextStyle(color: Colors.blue),
       ),
     );
   }
