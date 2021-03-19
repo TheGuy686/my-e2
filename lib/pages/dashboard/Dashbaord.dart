@@ -131,10 +131,6 @@ class _DashboardState extends State<Dashboard> {
 
     if (widget.appState.annons.annons.length == 0) return Container();
 
-    print('HERE');
-
-    inspect(widget.appState);
-
     return AnnouncementTimer(
       annon: widget.appState.annons.annons[0],
     );
@@ -346,7 +342,7 @@ class _DashboardState extends State<Dashboard> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final prop = widget.appState.prof.properties[index];
-                      //   inspect(prop);
+
                       return GestureDetector(
                         onTap: () => {print('clicked')},
                         child: Card(
