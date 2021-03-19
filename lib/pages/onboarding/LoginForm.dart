@@ -1,14 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:my_e2/pages/models/AppState.dart';
 import 'package:my_e2/pages/models/Onboarding.dart';
 
 class LoginForm extends StatefulWidget {
+  AppState appState;
   dynamic toggelRegister;
-  String user = '';
-  String pass = '';
 
-  LoginForm({this.toggelRegister});
+  LoginForm({@required this.appState, this.toggelRegister});
 
   @override
   _LoginFormState createState() {
@@ -85,7 +85,7 @@ class _LoginFormState extends State<LoginForm> {
                                 onChanged: (text) {
                                   setState(() {
                                     print(text);
-                                    widget.user = text;
+                                    widget.appState.username = text;
                                   });
                                 },
                                 initialValue: 'ryanjcooke@hotmail.com',
@@ -116,10 +116,10 @@ class _LoginFormState extends State<LoginForm> {
                                 ),
                                 onChanged: (text) {
                                   setState(() {
-                                    widget.pass = text;
+                                    widget.appState.password = text;
                                   });
                                 },
-                                initialValue: '',
+                                initialValue: 'Luvmajesus1!*',
                               ),
                               SizedBox(height: 20),
                               Row(
@@ -136,8 +136,6 @@ class _LoginFormState extends State<LoginForm> {
                                     ),
                                     onPressed: () {
                                       widget.toggelRegister();
-
-                                      // setState
                                     },
                                     child: Text(
                                       'Sign Up',
@@ -155,11 +153,11 @@ class _LoginFormState extends State<LoginForm> {
                                     ),
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
-                                        print(widget.user);
+                                        print(widget.appState.password);
                                         Onboarding.login(
                                           context,
-                                          widget.user,
-                                          widget.pass,
+                                          widget.appState.username,
+                                          widget.appState.password,
                                         );
                                       }
                                     },

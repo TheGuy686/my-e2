@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_e2/pages/SplashScreen.dart';
+import 'package:my_e2/pages/models/AppState.dart';
+
+AppState appState = AppState();
 
 void main() => runApp(MyRootApp());
 
@@ -17,7 +20,7 @@ class MyRootApp extends StatelessWidget {
       title: 'MyE2',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: SplashScreen(),
+      home: SplashScreen(appState: appState),
     );
   }
 }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:my_e2/pages/onboarding/LoginForm.dart';
 
+import 'models/AppState.dart';
 import 'onboarding/RegisterForm.dart';
 
 class Login extends StatefulWidget {
   bool showRegister = false;
+
+  AppState appState;
+
+  Login({Key key, @required this.appState}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -30,7 +35,8 @@ class _LoginState extends State<Login> {
       if (widget.showRegister)
         return RegisterForm(toggelRegister: toggelRegister);
 
-      return LoginForm(toggelRegister: toggelRegister);
+      return LoginForm(
+          appState: widget.appState, toggelRegister: toggelRegister);
     }
 
     return Scaffold(

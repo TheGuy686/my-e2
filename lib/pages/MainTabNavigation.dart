@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:my_e2/pages/youtube-channel/OfficialChannel.dart';
 
 import 'dashboard/Dashbaord.dart';
+import 'models/AppState.dart';
 
 class MainTabNavigation extends StatefulWidget {
+  AppState appState;
+
+  MainTabNavigation({Key key, @required this.appState}) : super(key: key);
+
   @override
   _MainTabNavigationState createState() => _MainTabNavigationState();
 }

@@ -7,9 +7,15 @@ import 'package:my_e2/pages/Login.dart';
 import 'package:my_e2/pages/MainTabNavigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'models/AppState.dart';
+
 class SplashScreen extends StatefulWidget {
   final TextStyle styleTextUnderTheLoader = TextStyle(
       fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black);
+
+  AppState appState;
+
+  SplashScreen({Key key, @required this.appState}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -41,14 +47,15 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => Login(),
+            builder: (BuildContext context) => Login(appState: widget.appState),
           ),
         );
       } else {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => MainTabNavigation(),
+            builder: (BuildContext context) =>
+                MainTabNavigation(appState: widget.appState),
           ),
         );
       }
