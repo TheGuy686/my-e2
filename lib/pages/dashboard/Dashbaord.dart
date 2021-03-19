@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
 import 'package:my_e2/pages/models/AppState.dart';
+import 'package:my_e2/pages/settings/SettingsPage.dart';
 import 'package:my_e2/utils/Endpoints.dart';
 
 import 'AnnouncementTimer.dart';
@@ -21,7 +22,7 @@ Future fetchProfile(AppState appState, updateProfile) async {
       API_HOST,
       '/api/user/profile',
       {
-        'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
+        'profileId': appState.settings['profileId'],
       },
     );
 
@@ -156,13 +157,18 @@ class _DashboardState extends State<Dashboard> {
         title: const Text('Dashbaord'),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.add_alert),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(content: Text('This is a snackbar')));
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      SettingsPage(appState: widget.appState),
+                ),
+              );
 
-              futureProfile = fetchProfile(widget.appState, _updateAnnons);
+              //futureProfile = fetchProfile(widget.appState, _updateAnnons);
             },
           ),
         ],
