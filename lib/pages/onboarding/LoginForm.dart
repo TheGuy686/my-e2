@@ -198,50 +198,70 @@ class _LoginFormState extends State<LoginForm> {
                                       successColor: Colors.green,
                                       controller: _btnLoginController,
                                       onPressed: () async {
+                                        if (!_formKey.currentState.validate()) {
+                                          return;
+                                        }
+
                                         setState(() => {isLoggingIn = true});
 
-                                        bool res = await Onboarding.login(
+                                        await Onboarding.login(
                                           widget.appState.username,
                                           widget.appState.password,
-                                        );
+                                          () {
+                                            setState(
+                                                () => {isLoggingIn = false});
+                                            _btnLoginController.success();
 
-                                        if (res) {
-                                          setState(() => {isLoggingIn = false});
-                                          _btnLoginController.success();
-
-                                          Timer(
-                                            Duration(milliseconds: 800),
-                                            () {
-                                              _btnLoginController.reset();
-                                            },
-                                          );
-
-                                          Timer(Duration(milliseconds: 1350),
+                                            Timer(
+                                              Duration(milliseconds: 800),
                                               () {
-                                            _btnLoginController.reset();
+                                                _btnLoginController.reset();
+                                              },
+                                            );
 
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        MainTabNavigation(
-                                                            appState: widget
-                                                                .appState),
+                                            Timer(Duration(milliseconds: 1350),
+                                                () {
+                                              _btnLoginController.reset();
+
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          MainTabNavigation(
+                                                              appState: widget
+                                                                  .appState),
+                                                ),
+                                              );
+                                            });
+                                          },
+                                          (String error) {
+                                            setState(
+                                                () => {isLoggingIn = false});
+                                            _btnLoginController.error();
+
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.red,
+                                                content: Text(
+                                                  'Error: $error',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
                                               ),
                                             );
-                                          });
-                                        } else {
-                                          _btnLoginController.error();
-                                          Timer(
-                                            Duration(seconds: 2),
-                                            () {
-                                              setState(
-                                                  () => {isLoggingIn = false});
-                                              _btnLoginController.reset();
-                                            },
-                                          );
-                                        }
+
+                                            Timer(
+                                              Duration(seconds: 2),
+                                              () {
+                                                _btnLoginController.reset();
+                                              },
+                                            );
+                                          },
+                                        );
                                       },
                                     ),
                                   )

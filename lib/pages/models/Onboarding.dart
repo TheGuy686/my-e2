@@ -10,6 +10,8 @@ class Onboarding {
   static Future login(
     String username,
     String password,
+    successCb,
+    errorCb,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -27,30 +29,27 @@ class Onboarding {
         ),
       );
 
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body) as Map;
+      final json = jsonDecode(response.body) as Map;
 
+      if (response.statusCode == 200) {
         json.forEach((k, v) async {
           await prefs.setString(k, v);
         });
 
         print('logged in successfully');
 
-        return true;
+        successCb();
       } else {
-        print('ERROR 1');
-        //errorCb();
-        // throw Exception('Failed to Login');
-
-        return false;
+        if (json['message'] == 'Authentication failed') {
+          errorCb('Username or Password was wrong');
+        } else {
+          errorCb(json['message']);
+        }
       }
     } catch (e) {
-      print('ERROR 2');
       print('PROFILE ERROR: ');
       inspect(e);
-      //errorCb();
-
-      return false;
+      errorCb(e.toString());
     }
   }
 

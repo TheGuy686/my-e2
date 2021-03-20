@@ -138,10 +138,10 @@ class _RegisterFormState extends State<RegisterForm> {
                                     ),
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
-                                        Onboarding.login(
-                                          'ryanjcooke@hotmail.com',
-                                          'Luvmajesus1!*',
-                                        );
+                                        // Onboarding.login(
+                                        //   'ryanjcooke@hotmail.com',
+                                        //   'Luvmajesus1!*',
+                                        // );
                                       }
                                     },
                                     child: Text(
