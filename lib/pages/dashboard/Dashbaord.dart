@@ -80,20 +80,20 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () async {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (BuildContext context) =>
-              //           SettingsPage(appState: widget.appState),
-              //     ),
-              //   );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      SettingsPage(appState: widget.appState),
+                ),
+              );
 
-              widget.appState.initSettings();
+              //   widget.appState.initSettings();
 
               //   inspect(widget.appState);
 
               //   widget.appState.fetchAnnouncements(_updateAnnons);
-              widget.appState.fetchProfile(_updateProfile);
+              //   widget.appState.fetchProfile(_updateProfile);
             },
           ),
         ],

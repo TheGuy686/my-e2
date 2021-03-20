@@ -150,7 +150,7 @@ class _OfficialChannelState extends State<OfficialChannel> {
                     _channel.videos.length != int.parse(_channel.videoCount) &&
                     scrollDetails.metrics.pixels ==
                         scrollDetails.metrics.maxScrollExtent) {
-                  _loadMoreVideos();
+                  //_loadMoreVideos();
                 }
                 return false;
               },
