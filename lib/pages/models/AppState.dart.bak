@@ -51,7 +51,7 @@ class AppState {
     try {
       Uri url = Uri.https(
         API_HOST,
-        '/api/user/profile',
+        '/user/profile',
         {
           'profileId': settings['profileId'],
         },
@@ -86,7 +86,7 @@ class AppState {
     try {
       Uri url = Uri.https(
         API_HOST,
-        '/api/user/profile',
+        '/user/profile',
         {
           'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
         },

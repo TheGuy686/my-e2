@@ -98,7 +98,7 @@ class AppState {
     try {
       Uri url = Uri.https(
         API_HOST,
-        '/api/user/settings',
+        '/user/settings',
         {
           'profileId': settings['profileId'],
         },
@@ -140,7 +140,7 @@ class AppState {
     try {
       Uri url = Uri.https(
         API_HOST,
-        '/api/user/profile',
+        '/user/profile',
         {
           'profileId': settings['profileId'],
         },
@@ -173,7 +173,7 @@ class AppState {
 
   Future fetchAnnouncements(updateAnnons) async {
     try {
-      Uri url = Uri.https(API_HOST, '/api/announcements');
+      Uri url = Uri.https(API_HOST, '/announcements');
 
       print('doing request: fetchAnnouncements');
 

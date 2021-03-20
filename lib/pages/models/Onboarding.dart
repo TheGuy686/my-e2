@@ -23,7 +23,7 @@ class Onboarding {
       print('doing login');
 
       final response = await http.post(
-        Uri.https(API_HOST, '/api/identity/authenticate'),
+        Uri.https(API_HOST, '/identity/authenticate'),
         body: jsonEncode(
           <String, String>{
             'username': email,
@@ -68,7 +68,7 @@ class Onboarding {
     try {
       print('doing register');
       final response = await http.post(
-        Uri.https(API_HOST, '/api/identity/register'),
+        Uri.https(API_HOST, '/identity/register'),
         body: jsonEncode(
           <String, String>{
             'email': email,
@@ -85,6 +85,8 @@ class Onboarding {
       } else {
         if (response.statusCode == 400) {
           String message = response.body.toString();
+
+          print(message);
 
           if (message == 'User already exists') {
             errorCb('A user already existed with that username');

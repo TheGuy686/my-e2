@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
     if (widget.appState.hasProfileId()) {
       print('AND SHOULD HAVE A PROFILE ID');
       widget.appState.fetchProfile(_updateProfile);
-      widget.appState.fetchAnnouncements(_updateAnnons);
+      //widget.appState.fetchAnnouncements(_updateAnnons);
     }
   }
 
@@ -71,7 +71,7 @@ class _DashboardState extends State<Dashboard> {
 
   TextStyle giInfoTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 12,
+    fontSize: 11,
   );
 
   _renderGrid(AppState appState) {
@@ -137,7 +137,6 @@ class _DashboardState extends State<Dashboard> {
                           top: 3,
                           right: 3,
                           child: Container(
-                            //color: Colors.white,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
                               color: Colors.white,
@@ -172,7 +171,9 @@ class _DashboardState extends State<Dashboard> {
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
                           child: Text(
-                            prop.description,
+                            prop.description.length > 18
+                                ? prop.description.substring(0, 18) + '...'
+                                : prop.description,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -187,7 +188,7 @@ class _DashboardState extends State<Dashboard> {
                         children: [
                           SizedBox(
                             width: double.infinity,
-                            height: 5,
+                            height: 2,
                           ),
                           Row(
                             children: [
@@ -199,7 +200,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           SizedBox(
                             width: double.infinity,
-                            height: 2,
+                            height: 1,
                           ),
                           Row(
                             children: [
@@ -375,7 +376,7 @@ class _DashboardState extends State<Dashboard> {
                     child: Card(
                       elevation: 4,
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -16,7 +16,7 @@ class SettingsModel {
       print('saving settings');
 
       final response = await http.put(
-        Uri.https(API_HOST, '/api/user/settings'),
+        Uri.https(API_HOST, '/user/settings'),
         body: jsonEncode(
           <String, String>{
             'profileId': profileId,

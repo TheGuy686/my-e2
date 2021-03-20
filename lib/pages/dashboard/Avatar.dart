@@ -23,7 +23,7 @@ class _AvatarState extends State<Avatar> {
         Container(
           width: avatarSize * 1.1,
           height: avatarSize * 1.2,
-          decoration: new BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
             boxShadow: [

@@ -42,8 +42,6 @@ class Profile {
     json['properties']
         .forEach((k, v) => prof.properties.add(Property.fromJson(v)));
 
-    inspect(prof);
-
     return prof;
   }
 }

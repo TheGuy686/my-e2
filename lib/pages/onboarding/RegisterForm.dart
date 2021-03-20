@@ -31,7 +31,80 @@ class _RegisterFormState extends State<RegisterForm> {
 
   bool isRegistering = false;
 
+  String password = '';
   String passwordConfirm = '';
+
+  String _passwordIsvalid(pass) {
+    RegExp regExp = new RegExp(
+      r"([A-Z]+)",
+      caseSensitive: true,
+      multiLine: false,
+    );
+
+    if (!regExp.hasMatch(pass)) {
+      return 'Password doesnt contain a capital "A-Z"';
+    }
+
+    regExp = new RegExp(
+      r"([a-z]+)",
+      caseSensitive: true,
+      multiLine: false,
+    );
+
+    if (!regExp.hasMatch(pass)) {
+      return 'Password doesnt contain none capitals "a-z"';
+    }
+
+    regExp = new RegExp(
+      r"([0-9]+)",
+      caseSensitive: true,
+      multiLine: false,
+    );
+
+    if (!regExp.hasMatch(pass)) {
+      return 'Password doesnt contain any numbers "0-9"';
+    }
+
+    regExp = new RegExp(
+      r"([\$\#\!\@\%\^\&\*\(\|\)]+)",
+      caseSensitive: true,
+      multiLine: false,
+    );
+
+    if (!regExp.hasMatch(pass)) {
+      return 'Password doesnt contain any special chars "!#\$%^*" ...';
+    }
+
+    return '';
+  }
+
+  _renderPassError() {
+    String error = _passwordIsvalid(widget.appState.password);
+
+    if (error == '') return Container();
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.white,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+        color: Colors.white.withOpacity(0.8),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Text(
+          error,
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +170,8 @@ class _RegisterFormState extends State<RegisterForm> {
                                     widget.appState.username = text;
                                   });
                                 },
-                                initialValue: widget.appState.username,
+                                // initialValue: widget.appState.username,
+                                initialValue: 'gigx',
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -128,7 +202,8 @@ class _RegisterFormState extends State<RegisterForm> {
                                     widget.appState.email = text;
                                   });
                                 },
-                                initialValue: widget.appState.email,
+                                // initialValue: widget.appState.email,
+                                initialValue: 'gingzginger@gmail.com',
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -155,12 +230,16 @@ class _RegisterFormState extends State<RegisterForm> {
                                   fillColor: Colors.white,
                                 ),
                                 onChanged: (text) {
+                                  _passwordIsvalid(text);
+
                                   setState(() {
                                     widget.appState.password = text;
                                   });
                                 },
                                 initialValue: '',
                               ),
+                              SizedBox(height: 5),
+                              _renderPassError(),
                               SizedBox(height: 20),
                               TextFormField(
                                 obscureText: true,
@@ -190,7 +269,8 @@ class _RegisterFormState extends State<RegisterForm> {
                                     passwordConfirm = text;
                                   });
                                 },
-                                initialValue: 'Luvmajesus1!*',
+                                // initialValue: 'Luvmajesus1!*',
+                                initialValue: '',
                               ),
                               SizedBox(height: 20),
                               Row(
