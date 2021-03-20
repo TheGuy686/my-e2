@@ -40,6 +40,8 @@ class AppState {
 
     email = prefs.getString('email');
 
+    settings['profileId'] = Settings.getValue<String>('profile-id', '');
+
     String idt = prefs.getString('id_token');
 
     if (idt != '') {
@@ -49,13 +51,50 @@ class AppState {
     }
   }
 
+  bool hasProfileId() {
+    try {
+      String profileId = settings['profileId'];
+
+      return profileId != '';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool hasProps() {
+    return prof.properties.isEmpty;
+  }
+
   Future logout() async {
     prefs.remove("id_token");
     prefs.remove("refresh_token");
     prefs.remove("access_token");
   }
 
+  bool profileUpdatedInLast15Min() {
+    print('LBASLKJLSKDJFLKSD');
+
+    try {
+      int uts = int.parse(prefs.getString('last-profile-updated-ts'));
+
+      DateTime before = DateTime.fromMicrosecondsSinceEpoch(uts);
+      DateTime after = DateTime.now();
+
+      print('BEFORE: ' + before.toString());
+      print('AFTER: ' + after.toString());
+
+      return before.difference(after).inMilliseconds > 900000;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future fetchSettings() async {
+    if (profileUpdatedInLast15Min()) {
+      print('protedted against network bombardment');
+      return;
+    }
+
     try {
       Uri url = Uri.https(
         API_HOST,
@@ -87,7 +126,7 @@ class AppState {
 
   Future fetchProfile(updateProfile) async {
     var key = utf8.encode(email);
-
+    print('UPDATING PROFILE');
     String shaKay = sha1.convert(key).toString();
 
     String profilleCache = prefs.getString(shaKay);
@@ -147,7 +186,7 @@ class AppState {
           HttpHeaders.contentTypeHeader: "application/json",
         },
       );
-      inspect(response.body.toString());
+
       if (response.statusCode == 200) {
         updateAnnons(Announcements.fromJson(jsonDecode(response.body)));
       } else {

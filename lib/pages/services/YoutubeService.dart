@@ -36,8 +36,6 @@ class YoutubeService {
       Map<String, dynamic> data = json.decode(response.body)['items'][0];
       YoutubeChannel channel = YoutubeChannel.fromMap(data);
 
-      inspect(channel);
-
       // Fetch first batch of videos from uploads playlist
       channel.videos = await fetchVideosFromPlaylist(
         // playlistId: channel.uploadPlaylistId,

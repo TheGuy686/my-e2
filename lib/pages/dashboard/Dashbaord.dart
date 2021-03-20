@@ -26,37 +26,208 @@ class _DashboardState extends State<Dashboard> {
   Future futureAnnouncements;
   Future futureProfile;
 
+  final e2Cur = "E\$";
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
 
-    //widget.appState.fetchAnnouncements(_updateAnnons);
-    widget.appState.fetchProfile(_updateProfile);
+    _updatePageState();
+  }
+
+  void _updatePageState() {
+    if (widget.appState.hasProfileId()) {
+      print('AND SHOULD HAVE A PROFILE ID');
+      widget.appState.fetchProfile(_updateProfile);
+      widget.appState.fetchAnnouncements(_updateAnnons);
+    }
   }
 
   void _updateAnnons(Announcements newAnnons) {
     print('should have updated the announcements');
-    setState(() {
-      widget.appState.annons = newAnnons;
-    });
+    setState(
+      () {
+        widget.appState.annons = newAnnons;
+      },
+    );
   }
 
   void _updateProfile(Profile newProf) {
-    setState(() {
-      widget.appState.prof = newProf;
-    });
+    setState(
+      () {
+        widget.appState.prof = newProf;
+      },
+    );
   }
 
-  final e2Cur = "E\$";
-
   Widget _renderAnnons() {
-    print('RENDER ANNONS');
-    inspect(widget.appState);
-
     if (widget.appState.annons.annons.length == 0) return Container();
 
     return AnnouncementTimer(
       annon: widget.appState.annons.annons[0],
+    );
+  }
+
+  TextStyle giInfoTextStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+  );
+
+  _renderGrid(AppState appState) {
+    String text = '';
+
+    if (!appState.hasProfileId()) {
+      text = 'Please connect your account with \nan Earth2 profile id';
+    }
+
+    if (isLoading) {
+      text =
+          'Currently loading please wait.\nThis could take a while on the first time';
+    }
+
+    if (text != '') {
+      return SliverToBoxAdapter(
+        child: SizedBox(
+          height: 150,
+          child: Center(
+            child: Text(
+              'Please connect your account with \nan Earth2 profile id',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SliverGrid(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final prop = widget.appState.prof.properties[index];
+
+          return GestureDetector(
+            onTap: () => {print('clicked')},
+            child: Card(
+              elevation: 4,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(6, 6, 6, 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(4.5),
+                            topRight: Radius.circular(4.5),
+                            bottomLeft: Radius.zero,
+                            bottomRight: Radius.zero,
+                          ),
+                          child: Image.network(
+                            prop.thumbnail,
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                            height: 100,
+                          ),
+                        ),
+                        Positioned(
+                          top: 3,
+                          right: 3,
+                          child: Container(
+                            //color: Colors.white,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.fromLTRB(5, 4, 5, 4),
+                            child: Row(
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    text: '${prop.tiles.toString()} ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: ' Tiles',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Container(
+                      color: Colors.orange,
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
+                          child: Text(
+                            prop.description,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(5, 8, 5, 4),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Price: ${e2Cur}${prop.price.toString()} (${prop.tradeValue.toString()})",
+                                style: giInfoTextStyle,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 2,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '${prop.location.long}, ${prop.location.lat}',
+                                style: giInfoTextStyle,
+                              ),
+                              Icon(
+                                Icons.location_pin,
+                                color: Colors.red,
+                                size: 12.0,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        childCount: widget.appState.prof.properties.length,
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
     );
   }
 
@@ -67,11 +238,6 @@ class _DashboardState extends State<Dashboard> {
 
     double bgOpacity = 0.15;
 
-    const giInfoTextStyle = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 12,
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashbaord'),
@@ -80,13 +246,15 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () async {
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) =>
                       SettingsPage(appState: widget.appState),
                 ),
               );
+
+              _updatePageState();
 
               //   widget.appState.fetchAnnouncements(_updateAnnons);
               //   widget.appState.fetchProfile(_updateProfile);
@@ -263,135 +431,7 @@ class _DashboardState extends State<Dashboard> {
                     centerTitle: false,
                   ),
                 ),
-                SliverGrid(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final prop = widget.appState.prof.properties[index];
-
-                      return GestureDetector(
-                        onTap: () => {print('clicked')},
-                        child: Card(
-                          elevation: 4,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(6, 6, 6, 6),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(4.5),
-                                        topRight: Radius.circular(4.5),
-                                        bottomLeft: Radius.zero,
-                                        bottomRight: Radius.zero,
-                                      ),
-                                      child: Image.network(
-                                        prop.thumbnail,
-                                        fit: BoxFit.fill,
-                                        width: double.infinity,
-                                        height: 100,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 3,
-                                      right: 3,
-                                      child: Container(
-                                        //color: Colors.white,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          color: Colors.white,
-                                        ),
-                                        padding:
-                                            EdgeInsets.fromLTRB(5, 4, 5, 4),
-                                        child: Row(
-                                          children: [
-                                            RichText(
-                                              text: TextSpan(
-                                                text:
-                                                    '${prop.tiles.toString()} ',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 9,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                    text: ' Tiles',
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Container(
-                                  color: Colors.orange,
-                                  child: Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                                      child: Text(
-                                        prop.description,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(5, 8, 5, 4),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "Price: ${e2Cur}${prop.price.toString()} (${prop.tradeValue.toString()})",
-                                            style: giInfoTextStyle,
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        height: 2,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '${prop.location.long}, ${prop.location.lat}',
-                                            style: giInfoTextStyle,
-                                          ),
-                                          Icon(
-                                            Icons.location_pin,
-                                            color: Colors.red,
-                                            size: 12.0,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: widget.appState.prof.properties.length,
-                  ),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                ),
+                _renderGrid(widget.appState),
               ],
             ),
           ),

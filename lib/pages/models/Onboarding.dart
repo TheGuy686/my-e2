@@ -78,8 +78,6 @@ class Onboarding {
         ),
       );
 
-      inspect(response.body.toString());
-
       if (response.statusCode == 200) {
         print('Successfully Registered');
 

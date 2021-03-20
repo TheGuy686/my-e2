@@ -205,7 +205,6 @@ class _LoginFormState extends State<LoginForm> {
                                           () {
                                             widget.appState.initSettings();
 
-                                            inspect(widget.appState);
                                             setState(
                                                 () => {isLoggingIn = false});
                                             _btnLoginController.success();

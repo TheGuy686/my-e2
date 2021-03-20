@@ -32,6 +32,8 @@ class SettingsModel {
 
       if (response.statusCode == 200) {
         print('Successfully updated settings');
+
+        appState.settings['profileId'] = profileId;
       } else {
         if (response.statusCode == 400) {
           String message = response.body.toString();
