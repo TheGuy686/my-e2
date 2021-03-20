@@ -55,9 +55,9 @@ class Onboarding {
 
   static Future register(
     String email,
-    String username,
     String password,
-    String title,
+    successCb,
+    errorCb,
   ) async {
     try {
       print('doing register');
@@ -65,24 +65,30 @@ class Onboarding {
         Uri.https(API_HOST, '/api/identity/register'),
         body: jsonEncode(
           <String, String>{
-            'username': username,
             'email': email,
             'password': password,
-            'title': title
+            'username': email,
           },
         ),
       );
 
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body) as Map;
+      final json = jsonDecode(response.body) as Map;
 
-        inspect(json);
+      if (response.statusCode == 200) {
+        print('logged in successfully');
+
+        successCb();
       } else {
-        throw Exception('Failed to Regeister');
+        if (json['message'] == 'Authentication failed') {
+          errorCb('Username or Password was wrong');
+        } else {
+          errorCb(json['message']);
+        }
       }
     } catch (e) {
       print('PROFILE ERROR: ');
       inspect(e);
+      errorCb(e.toString());
     }
   }
 }

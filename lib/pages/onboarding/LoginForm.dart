@@ -38,8 +38,6 @@ class _LoginFormState extends State<LoginForm> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    void _loginSuccess() {}
-
     // Build a Form widget using the _formKey created above.
     return CustomScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
