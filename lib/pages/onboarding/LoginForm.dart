@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:my_e2/pages/MainTabNavigation.dart';
 import 'package:my_e2/pages/models/AppState.dart';
 import 'package:my_e2/pages/models/Onboarding.dart';
+
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class LoginForm extends StatefulWidget {
   AppState appState;
@@ -16,6 +20,9 @@ class LoginForm extends StatefulWidget {
   }
 }
 
+final RoundedLoadingButtonController _btnLoginController =
+    new RoundedLoadingButtonController();
+
 class _LoginFormState extends State<LoginForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -24,10 +31,14 @@ class _LoginFormState extends State<LoginForm> {
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
 
+  bool isLoggingIn = false;
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    void _loginSuccess() {}
 
     // Build a Form widget using the _formKey created above.
     return CustomScrollView(
@@ -145,28 +156,95 @@ class _LoginFormState extends State<LoginForm> {
                                   Spacer(
                                     flex: 1,
                                   ),
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.white),
-                                    ),
-                                    onPressed: () {
-                                      if (_formKey.currentState.validate()) {
-                                        print(widget.appState.password);
-                                        Onboarding.login(
-                                          widget,
-                                          context,
+                                  //   ElevatedButton(
+                                  //     style: ButtonStyle(
+                                  //       backgroundColor:
+                                  //           MaterialStateProperty.all<Color>(
+                                  //               Colors.white),
+                                  //     ),
+                                  //     onPressed: () {
+                                  //       if (_formKey.currentState.validate()) {
+                                  //         print(widget.appState.password);
+                                  //         Onboarding.login(
+                                  //           widget,
+                                  //           context,
+                                  //           widget.appState.username,
+                                  //           widget.appState.password,
+                                  //         );
+                                  //       }
+                                  //     },
+                                  //     child: Text(
+                                  //       'Login',
+                                  //       style: TextStyle(color: Colors.blue),
+                                  //     ),
+                                  //   ),
+                                  SizedBox(
+                                    width: 70,
+                                    child: RoundedLoadingButton(
+                                      child: Text(
+                                        'Login',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                      borderRadius: 2,
+                                      elevation: 4,
+                                      color: Colors.white,
+                                      valueColor: !isLoggingIn
+                                          ? Colors.white
+                                          : Colors.blue,
+                                      width: 75,
+                                      height: 37,
+                                      successColor: Colors.green,
+                                      controller: _btnLoginController,
+                                      onPressed: () async {
+                                        setState(() => {isLoggingIn = true});
+
+                                        bool res = await Onboarding.login(
                                           widget.appState.username,
                                           widget.appState.password,
                                         );
-                                      }
-                                    },
-                                    child: Text(
-                                      'Login',
-                                      style: TextStyle(color: Colors.blue),
+
+                                        if (res) {
+                                          setState(() => {isLoggingIn = false});
+                                          _btnLoginController.success();
+
+                                          Timer(
+                                            Duration(milliseconds: 800),
+                                            () {
+                                              _btnLoginController.reset();
+                                            },
+                                          );
+
+                                          Timer(Duration(milliseconds: 1350),
+                                              () {
+                                            _btnLoginController.reset();
+
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        MainTabNavigation(
+                                                            appState: widget
+                                                                .appState),
+                                              ),
+                                            );
+                                          });
+                                        } else {
+                                          _btnLoginController.error();
+                                          Timer(
+                                            Duration(seconds: 2),
+                                            () {
+                                              setState(
+                                                  () => {isLoggingIn = false});
+                                              _btnLoginController.reset();
+                                            },
+                                          );
+                                        }
+                                      },
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
                             ],

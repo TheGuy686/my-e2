@@ -1,18 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:my_e2/utils/Endpoints.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../MainTabNavigation.dart';
-
 class Onboarding {
   static Future login(
-    dynamic widget,
-    BuildContext context,
     String username,
     String password,
   ) async {
@@ -41,21 +36,21 @@ class Onboarding {
 
         print('logged in successfully');
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                MainTabNavigation(appState: widget.appState),
-          ),
-        );
+        return true;
       } else {
-        // If the server did not return a 200 OK response,
-        // then throw an exception.
-        throw Exception('Failed to Login');
+        print('ERROR 1');
+        //errorCb();
+        // throw Exception('Failed to Login');
+
+        return false;
       }
     } catch (e) {
+      print('ERROR 2');
       print('PROFILE ERROR: ');
       inspect(e);
+      //errorCb();
+
+      return false;
     }
   }
 

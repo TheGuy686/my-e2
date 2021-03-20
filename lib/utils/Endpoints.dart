@@ -1,1 +1,1 @@
-const String API_HOST = 'f8qm3o1gwi.execute-api.us-east-1.amazonaws.com';
+const String API_HOST = '9kvi5mobh2.execute-api.us-east-1.amazonaws.com';

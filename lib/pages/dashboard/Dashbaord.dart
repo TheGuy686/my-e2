@@ -2,9 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'dart:developer';
-import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
@@ -15,75 +14,6 @@ import 'package:my_e2/utils/Endpoints.dart';
 import 'AnnouncementTimer.dart';
 import 'models/Announcements.dart';
 import 'models/Profile.dart';
-
-Future fetchProfile(AppState appState, updateProfile) async {
-  try {
-    Uri url = Uri.https(
-      API_HOST,
-      '/api/user/profile',
-      {
-        'profileId': appState.settings['profileId'],
-      },
-    );
-
-    print('fetching profile: ');
-
-    print(url);
-
-    print(appState.idToken);
-
-    final response = await http.get(
-      url,
-      headers: {
-        HttpHeaders.authorizationHeader: 'Bearer ${appState.idToken}',
-        HttpHeaders.contentTypeHeader: "application/json",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      updateProfile(Profile.fromJson(jsonDecode(response.body)));
-    } else {
-      inspect(jsonDecode(response.body));
-      throw Exception('Failed to load album');
-    }
-  } catch (e) {
-    print('PROFILE ERROR: ' + e.toString());
-  }
-}
-
-Future fetchAnnouncements(AppState appState, updateAnnons) async {
-  try {
-    Uri url = Uri.https(
-      API_HOST,
-      '/api/user/profile',
-      {
-        'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
-      },
-    );
-
-    print('doing request: fetchAnnouncements');
-
-    print("Basic ${appState.idToken}");
-
-    final response = await http.get(
-      url,
-      headers: {
-        HttpHeaders.authorizationHeader: 'Bearer ${appState.idToken}',
-        HttpHeaders.contentTypeHeader: "application/json",
-      },
-    );
-    inspect(response.body.toString());
-    if (response.statusCode == 200) {
-      updateAnnons(Announcements.fromJson(jsonDecode(response.body)));
-    } else {
-      inspect(response.body.toString());
-      throw Exception('Failed to load album');
-    }
-  } catch (e) {
-    print('ANNONS ERROR: ');
-    inspect(e);
-  }
-}
 
 class Dashboard extends StatefulWidget {
   AppState appState;
@@ -102,8 +32,8 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
 
-    futureAnnouncements = fetchAnnouncements(widget.appState, _updateAnnons);
-    futureProfile = fetchProfile(widget.appState, _updateProfile);
+    widget.appState.fetchAnnouncements(_updateAnnons);
+    widget.appState.fetchProfile(_updateProfile);
   }
 
   void _updateAnnons(Announcements newAnnons) {
