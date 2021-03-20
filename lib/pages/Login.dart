@@ -7,7 +7,7 @@ import 'models/AppState.dart';
 import 'onboarding/RegisterForm.dart';
 
 class Login extends StatefulWidget {
-  bool showRegister = true;
+  bool showRegister = false;
 
   AppState appState;
 

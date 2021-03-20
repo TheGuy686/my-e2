@@ -238,24 +238,28 @@ class _RegisterFormState extends State<RegisterForm> {
                                       onPressed: () async {
                                         FocusScope.of(context).unfocus();
 
-                                        if (passwordConfirm !=
-                                            widget.appState.password) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: Colors.red,
-                                              content: Text(
-                                                'Error: passwords did not match',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          );
+                                        print(passwordConfirm +
+                                            ' : ' +
+                                            widget.appState.password);
 
-                                          return;
-                                        }
+                                        // if (passwordConfirm !=
+                                        //     widget.appState.password) {
+                                        //   ScaffoldMessenger.of(context)
+                                        //       .showSnackBar(
+                                        //     SnackBar(
+                                        //       backgroundColor: Colors.red,
+                                        //       content: Text(
+                                        //         'Error: passwords did not match',
+                                        //         style: TextStyle(
+                                        //           color: Colors.white,
+                                        //           fontWeight: FontWeight.w600,
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //   );
+
+                                        //   return;
+                                        // }
 
                                         if (!_formKey.currentState.validate()) {
                                           return;

@@ -8,30 +8,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Onboarding {
   static Future login(
-    String username,
+    String email,
     String password,
     successCb,
     errorCb,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    print(username + ' : ' + password);
+    print(email);
+
+    print(password);
 
     try {
       print('doing login');
+
       final response = await http.post(
         Uri.https(API_HOST, '/api/identity/authenticate'),
         body: jsonEncode(
           <String, String>{
-            'username': username,
+            'username': email,
             'password': password,
           },
         ),
       );
 
       final json = jsonDecode(response.body) as Map;
-
+      inspect(json);
       if (response.statusCode == 200) {
+        await prefs.setString('email', email);
+
         json.forEach((k, v) async {
           await prefs.setString(k, v);
         });

@@ -4,12 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 
-import 'dart:convert';
 import 'dart:async';
 import 'package:my_e2/pages/dashboard/Avatar.dart';
 import 'package:my_e2/pages/models/AppState.dart';
 import 'package:my_e2/pages/settings/SettingsPage.dart';
-import 'package:my_e2/utils/Endpoints.dart';
 
 import 'AnnouncementTimer.dart';
 import 'models/Announcements.dart';
@@ -32,7 +30,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
 
-    widget.appState.fetchAnnouncements(_updateAnnons);
+    //widget.appState.fetchAnnouncements(_updateAnnons);
     widget.appState.fetchProfile(_updateProfile);
   }
 
@@ -82,15 +80,20 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      SettingsPage(appState: widget.appState),
-                ),
-              );
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (BuildContext context) =>
+              //           SettingsPage(appState: widget.appState),
+              //     ),
+              //   );
 
-              //futureProfile = fetchProfile(widget.appState, _updateAnnons);
+              widget.appState.initSettings();
+
+              //   inspect(widget.appState);
+
+              //   widget.appState.fetchAnnouncements(_updateAnnons);
+              widget.appState.fetchProfile(_updateProfile);
             },
           ),
         ],

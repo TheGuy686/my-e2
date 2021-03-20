@@ -73,12 +73,12 @@ class _LoginFormState extends State<LoginForm> {
                                 // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Please enter an email or username';
+                                    return 'Please enter an email';
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
-                                  hintText: 'Enter an email or username',
+                                  hintText: 'Enter an email',
                                   hintStyle: TextStyle(fontSize: 16),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
@@ -94,7 +94,7 @@ class _LoginFormState extends State<LoginForm> {
                                 onChanged: (text) {
                                   setState(() {
                                     print(text);
-                                    widget.appState.username = text;
+                                    widget.appState.email = text;
                                   });
                                 },
                                 initialValue: 'ryanjcooke@hotmail.com',
@@ -208,6 +208,9 @@ class _LoginFormState extends State<LoginForm> {
                                           widget.appState.email,
                                           widget.appState.password,
                                           () {
+                                            widget.appState.initSettings();
+
+                                            inspect(widget.appState);
                                             setState(
                                                 () => {isLoggingIn = false});
                                             _btnLoginController.success();

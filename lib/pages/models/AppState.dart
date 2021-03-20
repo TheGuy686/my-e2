@@ -6,7 +6,7 @@ import 'package:my_e2/pages/dashboard/models/Announcements.dart';
 import 'package:my_e2/pages/dashboard/models/Profile.dart';
 import 'package:my_e2/utils/Endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
 class AppState {
@@ -17,6 +17,8 @@ class AppState {
   String refreshToken = '';
   String accessToken = '';
 
+  String profileJson = '';
+
   Map<String, dynamic> settings = {
     'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
   };
@@ -25,11 +27,13 @@ class AppState {
   Announcements annons = Announcements();
 
   AppState() {
-    _initSettings();
+    initSettings();
   }
 
-  _initSettings() async {
+  initSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    email = prefs.getString('email');
 
     String idt = prefs.getString('id_token');
 
@@ -49,6 +53,20 @@ class AppState {
   }
 
   Future fetchProfile(updateProfile) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var key = utf8.encode(email);
+
+    String shaKay = sha1.convert(key).toString();
+
+    String profilleCache = prefs.getString(shaKay);
+
+    print(profilleCache);
+
+    if (profilleCache != null) {
+      updateProfile(Profile.fromJson(jsonDecode(profilleCache)));
+    }
+
     try {
       Uri url = Uri.https(
         API_HOST,
@@ -62,8 +80,6 @@ class AppState {
 
       print(url);
 
-      print(idToken);
-
       final response = await http.get(
         url,
         headers: {
@@ -73,6 +89,8 @@ class AppState {
       );
 
       if (response.statusCode == 200) {
+        await prefs.setString(shaKay, response.body.toString());
+
         updateProfile(Profile.fromJson(jsonDecode(response.body)));
       } else {
         inspect(jsonDecode(response.body));
@@ -85,17 +103,11 @@ class AppState {
 
   Future fetchAnnouncements(updateAnnons) async {
     try {
-      Uri url = Uri.https(
-        API_HOST,
-        '/api/announcements',
-        {
-          'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
-        },
-      );
+      Uri url = Uri.https(API_HOST, '/api/announcements');
 
       print('doing request: fetchAnnouncements');
 
-      print("Basic ${idToken}");
+      print("Bearer ${idToken}");
 
       final response = await http.get(
         url,
