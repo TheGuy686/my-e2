@@ -29,12 +29,14 @@ class _RegisterFormState extends State<RegisterForm> {
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
 
+  bool isRegistering = false;
+
+  String passwordConfirm = '';
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
-    bool isRegistering = false;
 
     // Build a Form widget using the _formKey created above.
     return CustomScrollView(
@@ -71,12 +73,12 @@ class _RegisterFormState extends State<RegisterForm> {
                                 // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Please enter an email or username';
+                                    return 'Please enter a username';
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
-                                  hintText: 'Enter an email or username',
+                                  hintText: 'Enter a username',
                                   hintStyle: TextStyle(fontSize: 16),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
@@ -95,7 +97,38 @@ class _RegisterFormState extends State<RegisterForm> {
                                     widget.appState.username = text;
                                   });
                                 },
-                                initialValue: 'ryanjcooke@hotmail.com',
+                                initialValue: widget.appState.username,
+                              ),
+                              SizedBox(height: 20),
+                              TextFormField(
+                                // The validator receives the text that the user has entered.
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter an email';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'Enter an email',
+                                  hintStyle: TextStyle(fontSize: 16),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  contentPadding: EdgeInsets.all(16),
+                                  fillColor: Colors.white,
+                                ),
+                                onChanged: (text) {
+                                  setState(() {
+                                    print(text);
+                                    widget.appState.email = text;
+                                  });
+                                },
+                                initialValue: widget.appState.email,
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -126,7 +159,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                     widget.appState.password = text;
                                   });
                                 },
-                                initialValue: 'Luvmajesus1!*',
+                                initialValue: '',
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -134,7 +167,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Confirm Password';
+                                    return 'Passwords don\'t match';
                                   }
                                   return null;
                                 },
@@ -154,7 +187,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 ),
                                 onChanged: (text) {
                                   setState(() {
-                                    widget.appState.password = text;
+                                    passwordConfirm = text;
                                   });
                                 },
                                 initialValue: 'Luvmajesus1!*',
@@ -205,6 +238,25 @@ class _RegisterFormState extends State<RegisterForm> {
                                       onPressed: () async {
                                         FocusScope.of(context).unfocus();
 
+                                        if (passwordConfirm !=
+                                            widget.appState.password) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                'Error: passwords did not match',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+
+                                          return;
+                                        }
+
                                         if (!_formKey.currentState.validate()) {
                                           return;
                                         }
@@ -212,6 +264,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                         setState(() => {isRegistering = true});
 
                                         await Onboarding.register(
+                                          widget.appState.email,
                                           widget.appState.username,
                                           widget.appState.password,
                                           () {
@@ -223,13 +276,31 @@ class _RegisterFormState extends State<RegisterForm> {
                                               Duration(milliseconds: 800),
                                               () {
                                                 _btnRegisterController.reset();
+
+                                                widget.toggelRegister();
                                               },
                                             );
 
-                                            Timer(Duration(milliseconds: 1350),
-                                                () {
-                                              _btnRegisterController.reset();
-                                            });
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.green,
+                                                content: Text(
+                                                  'User successfully registered. Please verify your email',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+
+                                            Timer(
+                                              Duration(seconds: 2),
+                                              () {
+                                                _btnRegisterController.reset();
+                                              },
+                                            );
                                           },
                                           (String error) {
                                             setState(

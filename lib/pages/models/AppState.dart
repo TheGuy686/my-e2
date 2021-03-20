@@ -10,7 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class AppState {
-  String username = 'ryanjcooke@hotmail.com';
+  String email = 'ryanjcooke@hotmail.com';
+  String username = 'theguy';
   String password = 'Luvmajesus1!*';
   String idToken = '';
   String refreshToken = '';
@@ -86,7 +87,7 @@ class AppState {
     try {
       Uri url = Uri.https(
         API_HOST,
-        '/api/user/profile',
+        '/api/announcements',
         {
           'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
         },

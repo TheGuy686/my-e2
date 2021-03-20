@@ -7,7 +7,7 @@ import 'models/AppState.dart';
 import 'onboarding/RegisterForm.dart';
 
 class Login extends StatefulWidget {
-  bool showRegister = false;
+  bool showRegister = true;
 
   AppState appState;
 
@@ -35,7 +35,8 @@ class _LoginState extends State<Login> {
 
     _renderForm() {
       if (widget.showRegister)
-        return RegisterForm(toggelRegister: toggelRegister);
+        return RegisterForm(
+            appState: widget.appState, toggelRegister: toggelRegister);
 
       return LoginForm(
         appState: widget.appState,

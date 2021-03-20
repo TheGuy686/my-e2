@@ -205,7 +205,7 @@ class _LoginFormState extends State<LoginForm> {
                                         setState(() => {isLoggingIn = true});
 
                                         await Onboarding.login(
-                                          widget.appState.username,
+                                          widget.appState.email,
                                           widget.appState.password,
                                           () {
                                             setState(
@@ -229,8 +229,8 @@ class _LoginFormState extends State<LoginForm> {
                                                   builder:
                                                       (BuildContext context) =>
                                                           MainTabNavigation(
-                                                              appState: widget
-                                                                  .appState),
+                                                    appState: widget.appState,
+                                                  ),
                                                 ),
                                               );
                                             });

@@ -55,6 +55,7 @@ class Onboarding {
 
   static Future register(
     String email,
+    String username,
     String password,
     successCb,
     errorCb,
@@ -67,22 +68,28 @@ class Onboarding {
           <String, String>{
             'email': email,
             'password': password,
-            'username': email,
+            'username': username,
           },
         ),
       );
 
-      final json = jsonDecode(response.body) as Map;
+      inspect(response.body.toString());
 
       if (response.statusCode == 200) {
-        print('logged in successfully');
+        print('Successfully Registered');
 
         successCb();
       } else {
-        if (json['message'] == 'Authentication failed') {
-          errorCb('Username or Password was wrong');
+        if (response.statusCode == 400) {
+          String message = response.body.toString();
+
+          if (message == 'User already exists') {
+            errorCb('A user already existed with that username');
+          } else {
+            errorCb('A user already existed with that email');
+          }
         } else {
-          errorCb(json['message']);
+          errorCb(response.body.toString());
         }
       }
     } catch (e) {
