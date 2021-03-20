@@ -6,6 +6,7 @@ import 'package:my_e2/pages/Login.dart';
 import 'package:my_e2/pages/models/AppState.dart';
 
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:my_e2/pages/models/SettingsModel.dart';
 import 'package:my_e2/pages/settings/AboutTheTeam.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -68,7 +69,7 @@ class _SettingsState extends State<SettingsPage> {
               borderColor: Colors.blueAccent,
               errorColor: Colors.deepOrangeAccent,
               onChange: (String val) {
-                print('VAL: ' + val);
+                SettingsModel.updateSettings(widget.appState, val);
               },
             ),
           ],

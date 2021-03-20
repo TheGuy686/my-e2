@@ -88,10 +88,6 @@ class _DashboardState extends State<Dashboard> {
                 ),
               );
 
-              //   widget.appState.initSettings();
-
-              //   inspect(widget.appState);
-
               //   widget.appState.fetchAnnouncements(_updateAnnons);
               //   widget.appState.fetchProfile(_updateProfile);
             },

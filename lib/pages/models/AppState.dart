@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:my_e2/pages/dashboard/models/Announcements.dart';
 import 'package:my_e2/pages/dashboard/models/Profile.dart';
 import 'package:my_e2/utils/Endpoints.dart';
@@ -19,8 +20,10 @@ class AppState {
 
   String profileJson = '';
 
+  SharedPreferences prefs;
+
   Map<String, dynamic> settings = {
-    'profileId': 'f108dd87-0202-41b4-99b6-b075323f68ea',
+    'profileId': '',
   };
 
   Profile prof = Profile();
@@ -31,7 +34,9 @@ class AppState {
   }
 
   initSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs == null) {
+      prefs = await SharedPreferences.getInstance();
+    }
 
     email = prefs.getString('email');
 
@@ -45,16 +50,42 @@ class AppState {
   }
 
   Future logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
     prefs.remove("id_token");
     prefs.remove("refresh_token");
     prefs.remove("access_token");
   }
 
-  Future fetchProfile(updateProfile) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future fetchSettings() async {
+    try {
+      Uri url = Uri.https(
+        API_HOST,
+        '/api/user/settings',
+        {
+          'profileId': settings['profileId'],
+        },
+      );
 
+      print('fetching settings: ');
+
+      print(url);
+
+      final response = await http.get(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer ${idToken}',
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        Map json = jsonDecode(response.body) as Map;
+
+        Settings.setValue<String>('profile-id', json['profileId']);
+      }
+    } catch (e) {}
+  }
+
+  Future fetchProfile(updateProfile) async {
     var key = utf8.encode(email);
 
     String shaKay = sha1.convert(key).toString();
