@@ -210,7 +210,8 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
                 ),
                 onTap: () async {
                   await launch(
-                      'https://www.facebook.com/groups/3386327578153734');
+                    'https://www.facebook.com/groups/241477974015494',
+                  );
                 },
               ),
             ),

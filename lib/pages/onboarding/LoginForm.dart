@@ -198,6 +198,8 @@ class _LoginFormState extends State<LoginForm> {
                                       successColor: Colors.green,
                                       controller: _btnLoginController,
                                       onPressed: () async {
+                                        FocusScope.of(context).unfocus();
+
                                         if (!_formKey.currentState.validate()) {
                                           return;
                                         }
