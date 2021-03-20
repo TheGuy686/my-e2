@@ -11,6 +11,45 @@ class Avatar extends StatefulWidget {
   _AvatarState createState() => _AvatarState();
 }
 
+Widget _renderAvatarImage(widget, avatarSize) {
+  RegExp regExp = new RegExp(
+    r"(\.svg)",
+    caseSensitive: false,
+    multiLine: false,
+  );
+
+  print('FROM A IMG');
+
+  double imageWidth = 100;
+
+  if (!regExp.hasMatch(widget.avatar)) {
+    return Container(
+      padding: EdgeInsets.all(3.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(imageWidth / 2),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30.0),
+          child: Image.network(
+            widget.avatar,
+            height: 80,
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    );
+  }
+
+  return SvgPicture.network(
+    widget.avatar,
+    semanticsLabel: 'Avatar',
+    width: avatarSize,
+    placeholderBuilder: (BuildContext context) => Container(
+      padding: EdgeInsets.all(3.0),
+      child: CircularProgressIndicator(),
+    ),
+  );
+}
+
 class _AvatarState extends State<Avatar> {
   @override
   Widget build(BuildContext context) {
@@ -38,17 +77,9 @@ class _AvatarState extends State<Avatar> {
         ),
         Container(
           width: avatarSize * 1.1,
-          height: avatarSize * 1.4,
+          height: avatarSize * 1.2,
           child: Center(
-            child: SvgPicture.network(
-              widget.avatar,
-              semanticsLabel: 'Avatar',
-              width: avatarSize,
-              placeholderBuilder: (BuildContext context) => Container(
-                padding: const EdgeInsets.all(3.0),
-                child: const CircularProgressIndicator(),
-              ),
-            ),
+            child: _renderAvatarImage(widget, avatarSize),
           ),
         ),
       ],

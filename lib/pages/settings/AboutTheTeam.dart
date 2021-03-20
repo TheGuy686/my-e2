@@ -168,7 +168,6 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
                   ],
                 ),
                 onTap: () {
-                  print('HELLo');
                   Clipboard.setData(
                     ClipboardData(text: 'HVY1XYXFD1'),
                   );

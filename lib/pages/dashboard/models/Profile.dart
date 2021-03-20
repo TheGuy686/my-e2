@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+
 import 'Property.dart';
 
 class Profile {
@@ -28,6 +30,10 @@ class Profile {
 
     //List<Property> properties =
     //     List<Property>.from(json['properties'].map((model) => (Property())));
+
+    print('AVATQARs');
+
+    debugPrint(json['info']['avatar']);
 
     Profile prof = Profile(
       avatar: json['info']['avatar'],

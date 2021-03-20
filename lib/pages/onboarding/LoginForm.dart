@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:my_e2/main.dart';
 import 'package:my_e2/pages/MainTabNavigation.dart';
 import 'package:my_e2/pages/models/AppState.dart';
 import 'package:my_e2/pages/models/Onboarding.dart';
@@ -92,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                                     widget.appState.email = text;
                                   });
                                 },
-                                initialValue: 'ryanjcooke@hotmail.com',
+                                initialValue: appState.email,
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -123,7 +124,7 @@ class _LoginFormState extends State<LoginForm> {
                                     widget.appState.password = text;
                                   });
                                 },
-                                initialValue: 'Luvmajesus1!*',
+                                initialValue: '',
                               ),
                               SizedBox(height: 20),
                               Row(

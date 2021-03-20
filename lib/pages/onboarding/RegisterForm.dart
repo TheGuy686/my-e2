@@ -269,7 +269,6 @@ class _RegisterFormState extends State<RegisterForm> {
                                     passwordConfirm = text;
                                   });
                                 },
-                                // initialValue: 'Luvmajesus1!*',
                                 initialValue: '',
                               ),
                               SizedBox(height: 20),
