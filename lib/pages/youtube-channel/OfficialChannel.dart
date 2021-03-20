@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_e2/pages/models/Video.dart';
-import 'package:my_e2/pages/models/YoutubeChannel.dart';
-import 'package:my_e2/pages/services/YoutubeService.dart';
+import 'package:MyE2/pages/models/Video.dart';
+import 'package:MyE2/pages/models/YoutubeChannel.dart';
+import 'package:MyE2/pages/services/YoutubeService.dart';
 
 import 'VideoScreen.dart';
 

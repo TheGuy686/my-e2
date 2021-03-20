@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-import 'package:my_e2/utils/Endpoints.dart';
+import 'package:MyE2/utils/Endpoints.dart';
 
 import 'AppState.dart';
 

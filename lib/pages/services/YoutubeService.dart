@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_e2/pages/models/Video.dart';
-import 'package:my_e2/pages/models/YoutubeChannel.dart';
-import 'package:my_e2/utils/keys.dart';
+import 'package:MyE2/pages/models/Video.dart';
+import 'package:MyE2/pages/models/YoutubeChannel.dart';
+import 'package:MyE2/utils/keys.dart';
 
 class YoutubeService {
   YoutubeService._instantiate();

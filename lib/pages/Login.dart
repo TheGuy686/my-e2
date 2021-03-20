@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:my_e2/pages/onboarding/LoginForm.dart';
+import 'package:MyE2/pages/onboarding/LoginForm.dart';
 
 import 'models/AppState.dart';
 import 'onboarding/RegisterForm.dart';
 
 class Login extends StatefulWidget {
-  bool showRegister = true;
+  bool showRegister = false;
 
   AppState appState;
 

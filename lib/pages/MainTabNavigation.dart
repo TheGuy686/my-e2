@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar/motiontabbar.dart';
-import 'package:my_e2/pages/youtube-channel/OfficialChannel.dart';
+import 'package:MyE2/pages/youtube-channel/OfficialChannel.dart';
 
 import 'dashboard/Dashbaord.dart';
 import 'models/AppState.dart';

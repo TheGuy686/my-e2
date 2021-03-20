@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_e2/pages/Login.dart';
-import 'package:my_e2/pages/models/AppState.dart';
+import 'package:MyE2/pages/Login.dart';
+import 'package:MyE2/pages/models/AppState.dart';
 
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:my_e2/pages/models/SettingsModel.dart';
-import 'package:my_e2/pages/settings/AboutTheTeam.dart';
+import 'package:MyE2/pages/models/SettingsModel.dart';
+import 'package:MyE2/pages/settings/AboutTheTeam.dart';
 
 class SettingsPage extends StatefulWidget {
   AppState appState;

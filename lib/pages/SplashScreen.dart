@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
-import 'package:my_e2/pages/Login.dart';
-import 'package:my_e2/pages/MainTabNavigation.dart';
+import 'package:MyE2/pages/Login.dart';
+import 'package:MyE2/pages/MainTabNavigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/AppState.dart';

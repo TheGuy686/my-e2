@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 
-import 'package:my_e2/utils/Endpoints.dart';
+import 'package:MyE2/utils/Endpoints.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 

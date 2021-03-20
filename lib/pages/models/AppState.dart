@@ -3,17 +3,17 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:my_e2/pages/dashboard/models/Announcements.dart';
-import 'package:my_e2/pages/dashboard/models/Profile.dart';
-import 'package:my_e2/utils/Endpoints.dart';
+import 'package:MyE2/pages/dashboard/models/Announcements.dart';
+import 'package:MyE2/pages/dashboard/models/Profile.dart';
+import 'package:MyE2/utils/Endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
 class AppState {
-  String email = 'ryanjcooke@hotmail.com';
-  String username = 'theguy';
-  String password = 'Luvmajesus1!*';
+  String email = '';
+  String username = '';
+  String password = '';
   String idToken = '';
   String refreshToken = '';
   String accessToken = '';

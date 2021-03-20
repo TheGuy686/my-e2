@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 
 import 'dart:async';
-import 'package:my_e2/pages/dashboard/Avatar.dart';
-import 'package:my_e2/pages/models/AppState.dart';
-import 'package:my_e2/pages/settings/SettingsPage.dart';
+import 'package:MyE2/pages/dashboard/Avatar.dart';
+import 'package:MyE2/pages/models/AppState.dart';
+import 'package:MyE2/pages/settings/SettingsPage.dart';
 
 import 'AnnouncementTimer.dart';
 import 'models/Announcements.dart';
@@ -37,11 +37,10 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void _updatePageState() {
-    if (widget.appState.hasProfileId()) {
-      print('AND SHOULD HAVE A PROFILE ID');
-      widget.appState.fetchProfile(_updateProfile);
-      //widget.appState.fetchAnnouncements(_updateAnnons);
-    }
+    //if (widget.appState.hasProfileId()) {
+    widget.appState.fetchProfile(_updateProfile);
+    widget.appState.fetchAnnouncements(_updateAnnons);
+    //}
   }
 
   void _updateAnnons(Announcements newAnnons) {
@@ -78,7 +77,8 @@ class _DashboardState extends State<Dashboard> {
     String text = '';
 
     if (!appState.hasProfileId()) {
-      text = 'Please connect your account with \nan Earth2 profile id';
+      text =
+          'Please connect your account with \nan Earth2 profile id.\nThis is located at the end of proifle link in the earth2.io website. \nFor eg. https://app.earth2.io/#profile/(f108dd87-0202-41b4-99b6-b075323f68ea)';
     }
 
     if (isLoading) {

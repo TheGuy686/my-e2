@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:my_e2/pages/models/AppState.dart';
-import 'package:my_e2/pages/models/Onboarding.dart';
+import 'package:MyE2/pages/models/AppState.dart';
+import 'package:MyE2/pages/models/Onboarding.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class RegisterForm extends StatefulWidget {
