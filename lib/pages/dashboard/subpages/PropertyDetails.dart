@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:MyE2/pages/classes/globals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MyE2/pages/models/AppState.dart';
@@ -42,9 +43,14 @@ class _PropertyDetailsState extends State<PropertyDetails> {
         onWebViewCreated: (controller) {
           widget.webView = controller;
         },
-        onPageFinished: (String url) async {
-          widget.webView.evaluateJavascript("\$('.header').hide();");
+        onProgress: (int progress) {
+          if (progress > 40) {
+            widget.webView.evaluateJavascript(
+                "\$(\$(\"content-holder\")[0]).attr('style', 'margin-top: 0px;');");
+            widget.webView.evaluateJavascript("\$('.header').hide();");
+          }
         },
+        onPageFinished: (String url) async {},
       ),
     );
   }
