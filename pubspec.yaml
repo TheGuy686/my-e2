@@ -35,6 +35,8 @@ dependencies:
   rounded_loading_button: ^1.0.0
   crypto: ^2.0.0
   flutter_launcher_icons: ^0.7.0
+  connectivity: ^3.0.3
+  ansicolor: ^2.0.1
 
 flutter_icons:
   image_path: 'lib/assets/icon.png'

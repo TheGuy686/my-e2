@@ -54,8 +54,10 @@ class _LoginFormState extends State<LoginForm> {
           },
         );
 
-        Timer(Duration(milliseconds: 1350), () {
+        Timer(Duration(milliseconds: 1350), () async {
           _btnLoginController.reset();
+
+          await widget.appState.initSettings();
 
           Navigator.pushReplacement(
             context,
@@ -99,11 +101,6 @@ class _LoginFormState extends State<LoginForm> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    Timer(Duration(seconds: 1), () {
-      _loginBtnClicked();
-    });
-
-    // Build a Form widget using the _formKey created above.
     return CustomScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       primary: true,

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:MyE2/pages/dashboard/models/Announcement.dart';
+import 'package:MyE2/pages/classes/ConnectionStatus.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:MyE2/pages/dashboard/models/Announcements.dart';
 import 'package:MyE2/pages/dashboard/models/Profile.dart';
@@ -12,6 +12,8 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
 class AppState {
+  ConnectionStatus conn = ConnectionStatus();
+
   String email = '';
   String username = '';
   String password = '';
@@ -139,7 +141,7 @@ class AppState {
     print(profilleCache);
 
     if (profilleCache != null) {
-      updateProfile(Profile.fromJson(jsonDecode(profilleCache)));
+      //updateProfile(Profile.fromJson(jsonDecode(profilleCache)));
     }
 
     try {

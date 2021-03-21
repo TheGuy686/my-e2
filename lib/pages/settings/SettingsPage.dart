@@ -204,6 +204,9 @@ class _SettingsState extends State<SettingsPage> {
                         MaterialStateProperty.all<Color>(Colors.blue),
                   ),
                   onPressed: () async {
+                    await Settings.setValue<String>(
+                        'profile-id', 'f108dd87-0202-41b4-99b6-b075323f68ea');
+
                     SettingsModel.updateSettings(
                       widget.appState,
                       'f108dd87-0202-41b4-99b6-b075323f68ea',

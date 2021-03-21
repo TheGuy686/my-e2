@@ -37,14 +37,20 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void _updatePageState() {
-    //if (widget.appState.hasProfileId()) {
-    widget.appState.fetchProfile(_updateProfile);
-    widget.appState.fetchAnnouncements(_updateAnnons);
-    //}
+    print('UPDATE PAGE STATE: ' + widget.appState.hasProfileId().toString());
+
+    if (widget.appState.hasProfileId()) {
+      setState(
+        () => {
+          //isLoading = true,
+        },
+      );
+      //widget.appState.fetchProfile(_updateProfile);
+      //widget.appState.fetchAnnouncements(_updateAnnons);
+    }
   }
 
   void _updateAnnons(Announcements newAnnons) {
-    print('should have updated the announcements');
     setState(
       () {
         widget.appState.annons = newAnnons;
@@ -73,31 +79,56 @@ class _DashboardState extends State<Dashboard> {
     fontSize: 11,
   );
 
-  _renderGrid(AppState appState) {
-    String text = '';
+  _renderGrid() {
+    String txt = '';
 
-    if (!appState.hasProfileId()) {
-      text =
-          'Please connect your account with \nan Earth2 profile id.\nThis is located at the end of proifle link in the earth2.io website. \nFor eg. https://app.earth2.io/#profile/(f108dd87-0202-41b4-99b6-b075323f68ea)';
+    print('HAS PROFILE ID: ' + widget.appState.hasProfileId().toString());
+
+    if (!widget.appState.hasProfileId()) {
+      txt =
+          'Please connect your account with \nan Earth2 profile id.\nThis is located at the end of proifle \nlink in the earth2.io website. \n\nFor eg. https://app.earth2.io/#profile/(f108dd87-0202-41b4-99b6-b075323f68ea)';
     }
 
     if (isLoading) {
-      text =
+      txt =
           'Currently loading please wait.\nThis could take a while on the first time';
     }
 
-    if (text != '') {
+    if (txt != '') {
       return SliverToBoxAdapter(
-        child: SizedBox(
-          height: 150,
+        child: IntrinsicHeight(
           child: Center(
-            child: Text(
-              'Please connect your account with \nan Earth2 profile id',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
+            child: (() {
+              var text = Text(
+                txt,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              );
+
+              if (isLoading) {
+                return Center(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 30),
+                      CircularProgressIndicator(),
+                      SizedBox(height: 30),
+                      text,
+                    ],
+                  ),
+                );
+              }
+
+              return Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: 30),
+                    text,
+                  ],
+                ),
+              );
+            })(),
           ),
         ),
       );
@@ -247,13 +278,13 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      SettingsPage(appState: widget.appState),
-                ),
-              );
+              //   await Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (BuildContext context) =>
+              //           SettingsPage(appState: widget.appState),
+              //     ),
+              //   );
 
               _updatePageState();
 
@@ -432,7 +463,7 @@ class _DashboardState extends State<Dashboard> {
                     centerTitle: false,
                   ),
                 ),
-                _renderGrid(widget.appState),
+                _renderGrid(),
               ],
             ),
           ),
