@@ -141,7 +141,7 @@ class _OfficialChannelState extends State<OfficialChannel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('YouTube Channel'),
+        title: Text('Official App YouTube Channel'),
       ),
       body: _channel != null
           ? NotificationListener<ScrollNotification>(

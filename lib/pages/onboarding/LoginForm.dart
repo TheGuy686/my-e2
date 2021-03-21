@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:MyE2/pages/classes/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:MyE2/main.dart';
 import 'package:MyE2/pages/MainTabNavigation.dart';
@@ -37,6 +38,8 @@ class _LoginFormState extends State<LoginForm> {
     }
 
     setState(() => {isLoggingIn = true});
+
+    inspect(widget.appState);
 
     await Onboarding.login(
       widget.appState.email,
@@ -155,11 +158,10 @@ class _LoginFormState extends State<LoginForm> {
                                 ),
                                 onChanged: (text) {
                                   setState(() {
-                                    print(text);
                                     widget.appState.email = text;
                                   });
                                 },
-                                initialValue: appState.email,
+                                initialValue: widget.appState.email,
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -191,11 +193,7 @@ class _LoginFormState extends State<LoginForm> {
                                   });
                                 },
                                 initialValue: (() {
-                                  setState(() {
-                                    widget.appState.password = 'Luvmajesus1!*';
-                                  });
-
-                                  return 'Luvmajesus1!*';
+                                  return widget.appState.password;
                                 })(),
                               ),
                               SizedBox(height: 20),

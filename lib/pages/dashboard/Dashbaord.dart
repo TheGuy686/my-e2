@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:MyE2/main.dart';
 import 'package:MyE2/pages/classes/globals.dart';
+import 'package:MyE2/pages/dashboard/subpages/PropertyDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
@@ -104,8 +105,6 @@ class _DashboardState extends State<Dashboard> {
   _renderGrid() {
     String txt = '';
 
-    print('HAS PROFILE ID: ' + widget.appState.hasProfileId().toString());
-
     if (!widget.appState.hasProfileId()) {
       txt =
           'Please connect your account with \nan Earth2 profile id.\nThis is located at the end of proifle \nlink in the earth2.io website. \n\nFor eg. https://app.earth2.io/#profile/(f108dd87-0202-41b4-99b6-b075323f68ea)';
@@ -162,7 +161,17 @@ class _DashboardState extends State<Dashboard> {
           final prop = widget.appState.prof.properties[index];
 
           return GestureDetector(
-            onTap: () => {print('clicked')},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => PropertyDetails(
+                    appState: widget.appState,
+                    url: 'https://app.earth2.io/${prop.link}',
+                  ),
+                ),
+              );
+            },
             child: Card(
               elevation: 4,
               child: Padding(
