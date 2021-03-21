@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:MyE2/pages/classes/ConnectionStatus.dart';
+import 'package:MyE2/pages/classes/globals.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:MyE2/pages/dashboard/models/Announcements.dart';
 import 'package:MyE2/pages/dashboard/models/Profile.dart';
@@ -79,29 +80,33 @@ class AppState {
   }
 
   bool profileUpdatedInLast15Min() {
-    print('LBASLKJLSKDJFLKSD');
-
     try {
       int uts = int.parse(prefs.getString('last-profile-updated-ts'));
 
-      DateTime before = DateTime.fromMicrosecondsSinceEpoch(uts);
-      DateTime after = DateTime.now();
+      if (uts == null) {
+        (() async {
+          await prefs.setString(
+            'last-profile-updated-ts',
+            DateTime.now().millisecondsSinceEpoch.toString(),
+          );
+        })();
 
-      print('BEFORE: ' + before.toString());
-      print('AFTER: ' + after.toString());
+        return false;
+      }
 
-      return before.difference(after).inMilliseconds > 900000;
+      int after = DateTime.now().millisecondsSinceEpoch;
+
+      double mins = (after - uts) / 60000;
+
+      return mins < 15;
     } catch (e) {
+      p(e.toString());
+
       return false;
     }
   }
 
   Future fetchSettings() async {
-    if (profileUpdatedInLast15Min()) {
-      print('protedted against network bombardment');
-      return;
-    }
-
     try {
       Uri url = Uri.https(
         API_HOST,
@@ -133,7 +138,9 @@ class AppState {
 
   Future fetchProfile(updateProfile) async {
     var key = utf8.encode(email);
+
     print('UPDATING PROFILE');
+
     String shaKay = sha1.convert(key).toString();
 
     String profilleCache = prefs.getString(shaKay);
@@ -142,6 +149,13 @@ class AppState {
 
     if (profilleCache != null) {
       updateProfile(Profile.fromJson(jsonDecode(profilleCache)));
+    }
+
+    if (profileUpdatedInLast15Min() &&
+        profilleCache != null &&
+        profilleCache != '') {
+      p('protedted against network bombardment');
+      return;
     }
 
     try {
