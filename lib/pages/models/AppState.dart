@@ -141,7 +141,7 @@ class AppState {
     print(profilleCache);
 
     if (profilleCache != null) {
-      //updateProfile(Profile.fromJson(jsonDecode(profilleCache)));
+      updateProfile(Profile.fromJson(jsonDecode(profilleCache)));
     }
 
     try {

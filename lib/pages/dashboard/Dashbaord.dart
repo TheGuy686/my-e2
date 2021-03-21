@@ -58,8 +58,15 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void _updatePageState() {
+    if (!widget.isConnected) return;
+
     if (widget.appState.hasProfileId()) {
-      //widget.appState.fetchProfile(_updateProfile);
+      setState(
+        () => {
+          isLoading = true,
+        },
+      );
+      widget.appState.fetchProfile(_updateProfile);
       //widget.appState.fetchAnnouncements(_updateAnnons);
     }
   }
@@ -76,6 +83,7 @@ class _DashboardState extends State<Dashboard> {
     setState(
       () {
         widget.appState.prof = newProf;
+        isLoading = false;
       },
     );
   }
@@ -289,8 +297,6 @@ class _DashboardState extends State<Dashboard> {
         return SliverToBoxAdapter(child: Container());
       }
 
-      p('RENDERED FROM HERE');
-
       return SliverToBoxAdapter(
         child: Container(
           width: double.infinity,
@@ -319,20 +325,15 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () async {
-              //   await Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (BuildContext context) =>
-              //           SettingsPage(appState: widget.appState),
-              //     ),
-              //   );
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      SettingsPage(appState: widget.appState),
+                ),
+              );
 
-              //_updatePageState();
-
-              _setConnectionState();
-
-              //   widget.appState.fetchAnnouncements(_updateAnnons);
-              //   widget.appState.fetchProfile(_updateProfile);
+              _updatePageState();
             },
           ),
         ],
