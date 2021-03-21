@@ -81,12 +81,16 @@ class AppState {
 
   bool profileUpdatedInLast15Min() {
     try {
-      int uts = int.parse(prefs.getString('last-profile-updated-ts'));
+      var key = utf8.encode(email);
+
+      String shaKay = sha1.convert(key).toString();
+
+      String uts = prefs.getString(shaKay + '-last-profile-updated-ts');
 
       if (uts == null) {
         (() async {
           await prefs.setString(
-            'last-profile-updated-ts',
+            shaKay + '-last-profile-updated-ts',
             DateTime.now().millisecondsSinceEpoch.toString(),
           );
         })();
@@ -96,9 +100,9 @@ class AppState {
 
       int after = DateTime.now().millisecondsSinceEpoch;
 
-      double mins = (after - uts) / 60000;
+      double mins = (after - int.parse(uts)) / 60000;
 
-      return mins < 15;
+      return mins < 180;
     } catch (e) {
       p(e.toString());
 
@@ -183,6 +187,13 @@ class AppState {
         await prefs.setString(shaKay, response.body.toString());
 
         updateProfile(Profile.fromJson(jsonDecode(response.body)));
+
+        (() async {
+          await prefs.setString(
+            shaKay + '-last-profile-updated-ts',
+            DateTime.now().millisecondsSinceEpoch.toString(),
+          );
+        })();
       } else {
         throw Exception('Filated to get profile: ' + response.body.toString());
       }
