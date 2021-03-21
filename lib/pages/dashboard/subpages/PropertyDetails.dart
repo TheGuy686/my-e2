@@ -43,7 +43,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
           widget.webView = controller;
         },
         onPageFinished: (String url) async {
-          widget.webView.evaluateJavascript("$('.header').hide();");
+          widget.webView.evaluateJavascript("\$('.header').hide();");
         },
       ),
     );
