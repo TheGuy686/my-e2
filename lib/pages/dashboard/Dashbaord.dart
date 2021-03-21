@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:MyE2/main.dart';
+import 'package:MyE2/pages/classes/globals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
@@ -16,6 +18,8 @@ import 'models/Profile.dart';
 class Dashboard extends StatefulWidget {
   AppState appState;
 
+  bool isConnected = true;
+
   Dashboard({Key key, @required this.appState}) : super(key: key);
 
   @override
@@ -29,22 +33,32 @@ class _DashboardState extends State<Dashboard> {
   final e2Cur = "E\$";
   bool isLoading = false;
 
+  void _setConnectionState() {
+    setState(
+      () => {
+        widget.isConnected = widget.appState.internetCon.isConnected,
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+
+    // _setConnectionState();
+
+    widget.appState.internetCon.onChange(
+      'dashboard-con',
+      () async {
+        _setConnectionState();
+      },
+    );
 
     _updatePageState();
   }
 
   void _updatePageState() {
-    print('UPDATE PAGE STATE: ' + widget.appState.hasProfileId().toString());
-
     if (widget.appState.hasProfileId()) {
-      setState(
-        () => {
-          //isLoading = true,
-        },
-      );
       //widget.appState.fetchProfile(_updateProfile);
       //widget.appState.fetchAnnouncements(_updateAnnons);
     }
@@ -270,6 +284,33 @@ class _DashboardState extends State<Dashboard> {
 
     double bgOpacity = 0.15;
 
+    _renderConnectionStatus() {
+      if (widget.isConnected) {
+        return SliverToBoxAdapter(child: Container());
+      }
+
+      p('RENDERED FROM HERE');
+
+      return SliverToBoxAdapter(
+        child: Container(
+          width: double.infinity,
+          color: Colors.red,
+          child: SizedBox(
+            height: 35,
+            child: Center(
+              child: Text(
+                'There is no internet connection',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashbaord'),
@@ -286,7 +327,9 @@ class _DashboardState extends State<Dashboard> {
               //     ),
               //   );
 
-              _updatePageState();
+              //_updatePageState();
+
+              _setConnectionState();
 
               //   widget.appState.fetchAnnouncements(_updateAnnons);
               //   widget.appState.fetchProfile(_updateProfile);
@@ -463,6 +506,7 @@ class _DashboardState extends State<Dashboard> {
                     centerTitle: false,
                   ),
                 ),
+                _renderConnectionStatus(),
                 _renderGrid(),
               ],
             ),

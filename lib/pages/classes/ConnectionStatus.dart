@@ -11,6 +11,10 @@ class ConnectionStatus {
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
+  bool isConnected = true;
+
+  Map<String, Function> events = {};
+
   ConnectionStatus() {
     initConnectivity();
 
@@ -32,17 +36,31 @@ class ConnectionStatus {
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    p(result);
+    if (ConnectivityResult.none == result) {
+      isConnected = false;
+    } else {
+      isConnected = true;
+    }
+
+    // here we need to emit all the events that are waiting for this.
+    events.forEach((e, f) async {
+      f();
+    });
 
     switch (result) {
       case ConnectivityResult.wifi:
       case ConnectivityResult.mobile:
       case ConnectivityResult.none:
         _connectionStatus = result.toString();
+
         break;
       default:
         _connectionStatus = 'Failed to get connectivity.';
         break;
     }
+  }
+
+  void onChange(String evtId, dynamic callback) {
+    events[evtId] = callback;
   }
 }

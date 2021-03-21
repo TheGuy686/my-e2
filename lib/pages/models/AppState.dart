@@ -12,7 +12,7 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
 class AppState {
-  ConnectionStatus conn = ConnectionStatus();
+  ConnectionStatus internetCon = ConnectionStatus();
 
   String email = '';
   String username = '';
