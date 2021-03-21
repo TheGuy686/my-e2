@@ -29,10 +29,79 @@ class _LoginFormState extends State<LoginForm> {
 
   bool isLoggingIn = false;
 
+  void _loginBtnClicked() async {
+    FocusScope.of(context).unfocus();
+
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+
+    setState(() => {isLoggingIn = true});
+
+    await Onboarding.login(
+      widget.appState.email,
+      widget.appState.password,
+      () {
+        widget.appState.initSettings();
+
+        setState(() => {isLoggingIn = false});
+        _btnLoginController.success();
+
+        Timer(
+          Duration(milliseconds: 800),
+          () {
+            _btnLoginController.reset();
+          },
+        );
+
+        Timer(Duration(milliseconds: 1350), () {
+          _btnLoginController.reset();
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => MainTabNavigation(
+                appState: widget.appState,
+              ),
+            ),
+          );
+        });
+      },
+      (String error) {
+        setState(() => {isLoggingIn = false});
+        _btnLoginController.error();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Error: $error',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        );
+
+        Timer(
+          Duration(seconds: 2),
+          () {
+            _btnLoginController.reset();
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    Timer(Duration(seconds: 1), () {
+      _loginBtnClicked();
+    });
 
     // Build a Form widget using the _formKey created above.
     return CustomScrollView(
@@ -124,7 +193,13 @@ class _LoginFormState extends State<LoginForm> {
                                     widget.appState.password = text;
                                   });
                                 },
-                                initialValue: '',
+                                initialValue: (() {
+                                  setState(() {
+                                    widget.appState.password = 'Luvmajesus1!*';
+                                  });
+
+                                  return 'Luvmajesus1!*';
+                                })(),
                               ),
                               SizedBox(height: 20),
                               Row(
@@ -150,28 +225,6 @@ class _LoginFormState extends State<LoginForm> {
                                   Spacer(
                                     flex: 1,
                                   ),
-                                  //   ElevatedButton(
-                                  //     style: ButtonStyle(
-                                  //       backgroundColor:
-                                  //           MaterialStateProperty.all<Color>(
-                                  //               Colors.white),
-                                  //     ),
-                                  //     onPressed: () {
-                                  //       if (_formKey.currentState.validate()) {
-                                  //         print(widget.appState.password);
-                                  //         Onboarding.login(
-                                  //           widget,
-                                  //           context,
-                                  //           widget.appState.username,
-                                  //           widget.appState.password,
-                                  //         );
-                                  //       }
-                                  //     },
-                                  //     child: Text(
-                                  //       'Login',
-                                  //       style: TextStyle(color: Colors.blue),
-                                  //     ),
-                                  //   ),
                                   SizedBox(
                                     width: 70,
                                     child: RoundedLoadingButton(
@@ -191,76 +244,7 @@ class _LoginFormState extends State<LoginForm> {
                                       height: 37,
                                       successColor: Colors.green,
                                       controller: _btnLoginController,
-                                      onPressed: () async {
-                                        FocusScope.of(context).unfocus();
-
-                                        if (!_formKey.currentState.validate()) {
-                                          return;
-                                        }
-
-                                        setState(() => {isLoggingIn = true});
-
-                                        await Onboarding.login(
-                                          widget.appState.email,
-                                          widget.appState.password,
-                                          () {
-                                            widget.appState.initSettings();
-
-                                            setState(
-                                                () => {isLoggingIn = false});
-                                            _btnLoginController.success();
-
-                                            Timer(
-                                              Duration(milliseconds: 800),
-                                              () {
-                                                _btnLoginController.reset();
-                                              },
-                                            );
-
-                                            Timer(Duration(milliseconds: 1350),
-                                                () {
-                                              _btnLoginController.reset();
-
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          MainTabNavigation(
-                                                    appState: widget.appState,
-                                                  ),
-                                                ),
-                                              );
-                                            });
-                                          },
-                                          (String error) {
-                                            setState(
-                                                () => {isLoggingIn = false});
-                                            _btnLoginController.error();
-
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                backgroundColor: Colors.red,
-                                                content: Text(
-                                                  'Error: $error',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-
-                                            Timer(
-                                              Duration(seconds: 2),
-                                              () {
-                                                _btnLoginController.reset();
-                                              },
-                                            );
-                                          },
-                                        );
-                                      },
+                                      onPressed: _loginBtnClicked,
                                     ),
                                   )
                                 ],

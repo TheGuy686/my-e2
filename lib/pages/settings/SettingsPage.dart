@@ -192,6 +192,31 @@ class _SettingsState extends State<SettingsPage> {
               ),
             ),
           ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue),
+                  ),
+                  onPressed: () async {
+                    SettingsModel.updateSettings(
+                      widget.appState,
+                      'f108dd87-0202-41b4-99b6-b075323f68ea',
+                    );
+                  },
+                  child: Text(
+                    'DEV FILLIN',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ],
         )
       ],
     );

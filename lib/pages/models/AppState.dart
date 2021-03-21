@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:MyE2/pages/dashboard/models/Announcement.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:MyE2/pages/dashboard/models/Announcements.dart';
 import 'package:MyE2/pages/dashboard/models/Profile.dart';
@@ -66,6 +67,10 @@ class AppState {
   }
 
   Future logout() async {
+    idToken = '';
+    refreshToken = '';
+    accessToken = '';
+
     prefs.remove("id_token");
     prefs.remove("refresh_token");
     prefs.remove("access_token");
@@ -163,8 +168,7 @@ class AppState {
 
         updateProfile(Profile.fromJson(jsonDecode(response.body)));
       } else {
-        inspect(jsonDecode(response.body));
-        throw Exception('Failed to load album');
+        throw Exception('Filated to get profile: ' + response.body.toString());
       }
     } catch (e) {
       print('PROFILE ERROR: ' + e.toString());
@@ -188,7 +192,14 @@ class AppState {
       );
 
       if (response.statusCode == 200) {
-        updateAnnons(Announcements.fromJson(jsonDecode(response.body)));
+        Announcements annons =
+            Announcements.fromJson(jsonDecode(response.body));
+
+        print('ANNONS: ');
+
+        inspect(annons.annons[0]);
+
+        //updateAnnons(annons);
       } else {
         inspect(response.body.toString());
         throw Exception('Failed to load album');

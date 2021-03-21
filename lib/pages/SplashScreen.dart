@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:MyE2/pages/models/Onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:MyE2/pages/Login.dart';
@@ -34,6 +35,15 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(Duration(seconds: 2), navigationPage);
   }
 
+  _navigateToLogin() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => Login(appState: widget.appState),
+      ),
+    );
+  }
+
   void navigationPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -42,21 +52,27 @@ class _SplashScreenState extends State<SplashScreen> {
       widget.appState.accessToken = prefs.getString('access_token');
       widget.appState.refreshToken = prefs.getString('refresh_token');
 
-      if (widget.appState.refreshToken != '') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => Login(appState: widget.appState),
-          ),
-        );
+      if (widget.appState.refreshToken == '') {
+        _navigateToLogin();
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return MainTabNavigation(appState: widget.appState);
-            },
-          ),
+        print('Attempting to refresh login token');
+
+        Onboarding.refreshToken(
+          widget.appState,
+          widget.appState.refreshToken,
+          () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return MainTabNavigation(appState: widget.appState);
+                },
+              ),
+            );
+          },
+          () {
+            _navigateToLogin();
+          },
         );
       }
     } catch (e) {
