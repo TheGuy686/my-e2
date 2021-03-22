@@ -75,7 +75,7 @@ class _DashboardState extends State<Dashboard> {
         },
       );
       widget.appState.fetchProfile(_updateProfile);
-      //widget.appState.fetchAnnouncements(_updateAnnons);
+      widget.appState.fetchAnnouncements(_updateAnnons);
     }
   }
 

@@ -224,11 +224,11 @@ class AppState {
         Announcements annons =
             Announcements.fromJson(jsonDecode(response.body));
 
-        print('ANNONS: ');
+        // print('ANNONS: ');
 
-        inspect(annons.annons[0]);
+        // inspect(annons.annons[0]);
 
-        //updateAnnons(annons);
+        updateAnnons(annons);
       } else {
         inspect(response.body.toString());
         throw Exception('Failed to load album');
