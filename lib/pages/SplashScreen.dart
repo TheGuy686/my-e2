@@ -74,6 +74,8 @@ class _SplashScreenState extends State<SplashScreen> {
             _navigateToLogin();
           },
         );
+
+        Onboarding.initRefreshToken(widget.appState);
       }
     } catch (e) {
       print('SPLASH SCREEN ERROR');

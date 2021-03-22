@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:MyE2/pages/classes/ConnectionStatus.dart';
 import 'package:MyE2/pages/classes/globals.dart';
+import 'package:MyE2/pages/models/Onboarding.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:MyE2/pages/dashboard/models/Announcements.dart';
 import 'package:MyE2/pages/dashboard/models/Profile.dart';
@@ -224,9 +226,10 @@ class AppState {
         Announcements annons =
             Announcements.fromJson(jsonDecode(response.body));
 
-        // print('ANNONS: ');
-
-        // inspect(annons.annons[0]);
+        if (annons.annons[0].endTimestamp <
+            DateTime.now().millisecondsSinceEpoch) {
+          return;
+        }
 
         updateAnnons(annons);
       } else {

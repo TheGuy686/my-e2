@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:MyE2/pages/classes/globals.dart';
 import 'package:flutter/material.dart';
-import 'package:MyE2/main.dart';
 import 'package:MyE2/pages/MainTabNavigation.dart';
 import 'package:MyE2/pages/models/AppState.dart';
 import 'package:MyE2/pages/models/Onboarding.dart';
@@ -39,9 +37,8 @@ class _LoginFormState extends State<LoginForm> {
 
     setState(() => {isLoggingIn = true});
 
-    inspect(widget.appState);
-
     await Onboarding.login(
+      widget.appState,
       widget.appState.email,
       widget.appState.password,
       () {
@@ -57,20 +54,23 @@ class _LoginFormState extends State<LoginForm> {
           },
         );
 
-        Timer(Duration(milliseconds: 1350), () async {
-          _btnLoginController.reset();
+        Timer(
+          Duration(milliseconds: 1350),
+          () async {
+            _btnLoginController.reset();
 
-          await widget.appState.initSettings();
+            await widget.appState.initSettings();
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => MainTabNavigation(
-                appState: widget.appState,
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => MainTabNavigation(
+                  appState: widget.appState,
+                ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
       (String error) {
         setState(() => {isLoggingIn = false});

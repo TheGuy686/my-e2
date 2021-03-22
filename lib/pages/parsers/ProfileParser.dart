@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-// import 'package:puppeteer/puppeteer.dart';
+import 'package:puppeteer/puppeteer.dart';
 
 class ProfileParser {
   String id;

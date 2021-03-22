@@ -49,7 +49,6 @@ class _AnnouncementState extends State<AnnouncementTimer> {
   _startTimer() {
     final duration = Duration(seconds: 1);
     Timer.periodic(duration, (timer) {
-      // Stop the timer when it matches a condition
       if (difference.inSeconds == 0) {
         timer.cancel();
       }

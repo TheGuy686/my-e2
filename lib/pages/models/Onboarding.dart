@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:MyE2/pages/classes/globals.dart';
 import 'package:MyE2/pages/models/AppState.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,7 +10,26 @@ import 'package:MyE2/utils/Endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Onboarding {
+  static initRefreshToken(AppState appState) {
+    Timer.periodic(
+      Duration(seconds: 10),
+      (timer) async {
+        refreshToken(
+          appState,
+          appState.refreshToken,
+          () {
+            p('TOKEN SUCCESSFULLY REFRESHED');
+          },
+          () {
+            p('THERE WAS AN ERROR');
+          },
+        );
+      },
+    );
+  }
+
   static Future login(
+    AppState appState,
     String email,
     String password,
     successCb,
@@ -34,7 +55,7 @@ class Onboarding {
       );
 
       final json = jsonDecode(response.body) as Map;
-      inspect(json);
+
       if (response.statusCode == 200) {
         await prefs.setString('email', email);
 
@@ -45,6 +66,8 @@ class Onboarding {
         print('logged in successfully');
 
         successCb();
+
+        initRefreshToken(appState);
       } else {
         if (json['message'] == 'Authentication failed') {
           errorCb('Username or Password was wrong');
@@ -82,7 +105,7 @@ class Onboarding {
       );
 
       final json = jsonDecode(response.body) as Map;
-      inspect(json);
+
       if (response.statusCode == 200) {
         json.forEach((k, v) async {
           await prefs.setString(k, v);

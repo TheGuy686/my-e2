@@ -65,10 +65,7 @@ class _DashboardState extends State<Dashboard> {
   void _updatePageState() {
     if (!widget.isConnected) return;
 
-    p('HELLO' + widget.appState.hasProfileId().toString());
-
     if (widget.appState.hasProfileId()) {
-      p('GETTING TO HERE');
       setState(
         () => {
           isLoading = true,
@@ -348,8 +345,6 @@ class _DashboardState extends State<Dashboard> {
                       SettingsPage(appState: widget.appState),
                 ),
               );
-
-              p(widget.appState.settings['profileId']);
 
               _updatePageState();
             },
