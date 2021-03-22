@@ -59,7 +59,7 @@ class _SettingsState extends State<SettingsPage> {
             TextInputSettingsTile(
               title: 'Profile Id',
               settingKey: 'profile-id',
-              initialValue: '',
+              initialValue: widget.appState.settings['profileId'],
               validator: (String profileId) {
                 if (profileId != null && profileId.length > 3) {
                   return null;

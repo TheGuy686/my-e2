@@ -44,7 +44,7 @@ class AppState {
 
     email = prefs.getString('email');
 
-    settings['profileId'] = Settings.getValue<String>('profile-id', '');
+    settings['profileId'] = prefs.getString('profile-id');
 
     String idt = prefs.getString('id_token');
 
@@ -136,6 +136,8 @@ class AppState {
         Map json = jsonDecode(response.body) as Map;
 
         Settings.setValue<String>('profile-id', json['profileId']);
+
+        await prefs.setString('profile-id', json['profileId']);
       }
     } catch (e) {}
   }
@@ -161,7 +163,7 @@ class AppState {
       p('protedted against network bombardment');
       return;
     }
-    p(settings['profileId']);
+
     try {
       Uri url = Uri.https(
         API_HOST,

@@ -52,8 +52,6 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
 
-    // _setConnectionState();
-
     widget.appState.internetCon.onChange(
       'dashboard-con',
       () async {
@@ -67,14 +65,17 @@ class _DashboardState extends State<Dashboard> {
   void _updatePageState() {
     if (!widget.isConnected) return;
 
+    p('HELLO' + widget.appState.hasProfileId().toString());
+
     if (widget.appState.hasProfileId()) {
+      p('GETTING TO HERE');
       setState(
         () => {
           isLoading = true,
         },
       );
       widget.appState.fetchProfile(_updateProfile);
-      widget.appState.fetchAnnouncements(_updateAnnons);
+      //widget.appState.fetchAnnouncements(_updateAnnons);
     }
   }
 
@@ -347,6 +348,8 @@ class _DashboardState extends State<Dashboard> {
                       SettingsPage(appState: widget.appState),
                 ),
               );
+
+              p(widget.appState.settings['profileId']);
 
               _updatePageState();
             },
