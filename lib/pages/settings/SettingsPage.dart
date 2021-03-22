@@ -69,6 +69,7 @@ class _SettingsState extends State<SettingsPage> {
               borderColor: Colors.blueAccent,
               errorColor: Colors.deepOrangeAccent,
               onChange: (String val) {
+                widget.appState.settings['profileId'] = val;
                 SettingsModel.updateSettings(widget.appState, val);
               },
             ),
@@ -193,34 +194,34 @@ class _SettingsState extends State<SettingsPage> {
             ),
           ],
         ),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
-                  ),
-                  onPressed: () async {
-                    await Settings.setValue<String>(
-                        'profile-id', 'f108dd87-0202-41b4-99b6-b075323f68ea');
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       child: Padding(
+        //         padding: EdgeInsets.all(10),
+        //         child: ElevatedButton(
+        //           style: ButtonStyle(
+        //             backgroundColor:
+        //                 MaterialStateProperty.all<Color>(Colors.blue),
+        //           ),
+        //           onPressed: () async {
+        //             await Settings.setValue<String>(
+        //                 'profile-id', 'f108dd87-0202-41b4-99b6-b075323f68ea');
 
-                    SettingsModel.updateSettings(
-                      widget.appState,
-                      'f108dd87-0202-41b4-99b6-b075323f68ea',
-                    );
-                  },
-                  child: Text(
-                    'DEV FILLIN',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        )
+        //             SettingsModel.updateSettings(
+        //               widget.appState,
+        //               'f108dd87-0202-41b4-99b6-b075323f68ea',
+        //             );
+        //           },
+        //           child: Text(
+        //             'DEV FILLIN',
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // )
       ],
     );
   }

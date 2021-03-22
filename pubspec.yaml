@@ -38,6 +38,7 @@ dependencies:
   connectivity: ^3.0.3
   ansicolor: ^2.0.1
   webview_flutter: ^2.0.2
+  intl: ^0.16.1
 
 flutter_icons:
   image_path: 'lib/assets/icon.png'

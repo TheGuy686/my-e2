@@ -161,7 +161,7 @@ class AppState {
       p('protedted against network bombardment');
       return;
     }
-
+    p(settings['profileId']);
     try {
       Uri url = Uri.https(
         API_HOST,

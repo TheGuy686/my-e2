@@ -15,6 +15,7 @@ import 'package:MyE2/pages/settings/SettingsPage.dart';
 import 'AnnouncementTimer.dart';
 import 'models/Announcements.dart';
 import 'models/Profile.dart';
+import "package:intl/intl.dart";
 
 class Dashboard extends StatefulWidget {
   AppState appState;
@@ -25,6 +26,11 @@ class Dashboard extends StatefulWidget {
 
   @override
   _DashboardState createState() => _DashboardState();
+}
+
+String formatNumber(num num) {
+  var f = NumberFormat("###,###,###,###.0#", "en_US");
+  return f.format(num);
 }
 
 class _DashboardState extends State<Dashboard> {
@@ -68,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
         },
       );
       widget.appState.fetchProfile(_updateProfile);
-      //widget.appState.fetchAnnouncements(_updateAnnons);
+      widget.appState.fetchAnnouncements(_updateAnnons);
     }
   }
 
@@ -417,8 +423,9 @@ class _DashboardState extends State<Dashboard> {
                                         style: TextStyle(color: Colors.black),
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: widget.appState.prof.owns
-                                                .toString(),
+                                            text: formatNumber(
+                                              widget.appState.prof.owns,
+                                            ),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -435,8 +442,9 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: widget.appState.prof.tiles
-                                                .toString(),
+                                            text: formatNumber(
+                                              widget.appState.prof.tiles,
+                                            ),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -474,7 +482,7 @@ class _DashboardState extends State<Dashboard> {
                                 children: <TextSpan>[
                                   TextSpan(
                                     text:
-                                        '${e2Cur} ${widget.appState.prof.netWorth.toString()}',
+                                        '${e2Cur} ${formatNumber(widget.appState.prof.netWorth)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -492,7 +500,7 @@ class _DashboardState extends State<Dashboard> {
                                 children: <TextSpan>[
                                   TextSpan(
                                     text:
-                                        '${e2Cur} ${widget.appState.prof.netProfit.toString()} (${widget.appState.prof.netProfitPercent.toString()}%)',
+                                        '${e2Cur} ${formatNumber(widget.appState.prof.netProfit)} (${formatNumber(widget.appState.prof.netProfitPercent)}%)',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),

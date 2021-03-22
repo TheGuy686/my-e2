@@ -22,7 +22,7 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About the Tean'),
+        title: const Text('About the Team'),
       ),
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -143,8 +143,7 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Expanded(
-              flex: 10,
+            child: Container(
               child: InkWell(
                 child: Column(
                   children: [
@@ -182,8 +181,7 @@ class _AboutTheTeamPageState extends State<AboutTheTeamPage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Expanded(
-              flex: 10,
+            child: Container(
               child: InkWell(
                 child: Column(
                   children: [
