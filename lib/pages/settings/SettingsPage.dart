@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:MyE2/pages/models/Onboarding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MyE2/pages/Login.dart';
@@ -173,7 +174,7 @@ class _SettingsState extends State<SettingsPage> {
                         MaterialStateProperty.all<Color>(Colors.blue),
                   ),
                   onPressed: () async {
-                    await widget.appState.logout();
+                    await Onboarding.logout(widget.appState);
 
                     Navigator.pushAndRemoveUntil(
                       context,

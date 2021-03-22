@@ -10,9 +10,11 @@ import 'package:MyE2/utils/Endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Onboarding {
+  static Timer refreshTmr;
+
   static initRefreshToken(AppState appState) {
-    Timer.periodic(
-      Duration(seconds: 10),
+    refreshTmr = Timer.periodic(
+      Duration(minutes: 14),
       (timer) async {
         refreshToken(
           appState,
@@ -26,6 +28,11 @@ class Onboarding {
         );
       },
     );
+  }
+
+  static logout(AppState appState) {
+    refreshTmr.cancel();
+    appState.logout();
   }
 
   static Future login(
