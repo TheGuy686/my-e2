@@ -26,15 +26,6 @@ class Profile {
       properties});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
-    //List<String, dynamic> properties = json["properties"];
-
-    //List<Property> properties =
-    //     List<Property>.from(json['properties'].map((model) => (Property())));
-
-    print('AVATQARs');
-
-    debugPrint(json['info']['avatar']);
-
     Profile prof = Profile(
       avatar: json['info']['avatar'],
       alias: json['info']['alias'],

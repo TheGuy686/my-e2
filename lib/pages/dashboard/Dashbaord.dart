@@ -72,7 +72,7 @@ class _DashboardState extends State<Dashboard> {
         },
       );
       widget.appState.fetchProfile(_updateProfile);
-      widget.appState.fetchAnnouncements(_updateAnnons);
+      //widget.appState.fetchAnnouncements(_updateAnnons);
     }
   }
 
@@ -338,13 +338,13 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      SettingsPage(appState: widget.appState),
-                ),
-              );
+              //   await Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (BuildContext context) =>
+              //           SettingsPage(appState: widget.appState),
+              //     ),
+              //   );
 
               _updatePageState();
             },

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:MyE2/pages/classes/ConnectionStatus.dart';
 import 'package:MyE2/pages/classes/globals.dart';
 import 'package:MyE2/pages/models/Onboarding.dart';
+import 'package:MyE2/pages/parsers/ProfileParser.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:MyE2/pages/dashboard/models/Announcements.dart';
 import 'package:MyE2/pages/dashboard/models/Profile.dart';
@@ -148,6 +149,10 @@ class AppState {
     var key = utf8.encode(email);
 
     print('UPDATING PROFILE');
+
+    await ProfileParser.parseFromPage(settings['profileId']);
+
+    return;
 
     String shaKay = sha1.convert(key).toString();
 
