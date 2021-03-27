@@ -28,7 +28,11 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-String formatNumber(num num) {
+String formatNumber(dynamic num) {
+  if (num == null) {
+    return num.toString();
+  }
+
   var f = NumberFormat("###,###,###,###.0#", "en_US");
   return f.format(num);
 }
@@ -85,6 +89,8 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void _updateProfile(Profile newProf) {
+    p('from here prof');
+    inspect(newProf);
     setState(
       () {
         widget.appState.prof = newProf;

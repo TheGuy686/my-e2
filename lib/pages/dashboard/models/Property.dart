@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:MyE2/pages/classes/globals.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'Location.dart';
@@ -26,7 +27,7 @@ class Property {
   });
 
   factory Property.fromJson(Map<dynamic, dynamic> json) {
-    // Iterable l = json.decode(response.body);
+    p('JSON PROPERTY ' + json.toString());
 
     return Property(
       id: json['id'],

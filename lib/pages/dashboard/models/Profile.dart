@@ -15,15 +15,15 @@ class Profile {
   double netProfitPercent;
   List<Property> properties = [];
 
-  Profile(
-      {this.avatar = 'na',
-      this.alias = 'na',
-      this.owns = 0,
-      this.tiles = 0,
-      this.netWorth = 0,
-      this.netProfit = 0,
-      this.netProfitPercent = 0,
-      properties});
+  Profile({
+    this.avatar = 'na',
+    this.alias = 'na',
+    this.owns = 0,
+    this.tiles = 0,
+    this.netWorth = 0,
+    this.netProfit = 0,
+    this.netProfitPercent = 0,
+  });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     Profile prof = Profile(

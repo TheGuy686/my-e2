@@ -150,7 +150,7 @@ class AppState {
 
     print('UPDATING PROFILE');
 
-    await ProfileParser.parseFromPage(settings['profileId']);
+    await ProfileParser.parseFromPage(settings['profileId'], updateProfile);
 
     return;
 
