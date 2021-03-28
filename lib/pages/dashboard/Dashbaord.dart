@@ -75,8 +75,15 @@ class _DashboardState extends State<Dashboard> {
           isLoading = true,
         },
       );
-      widget.appState.fetchProfile(_updateProfile);
-      //widget.appState.fetchAnnouncements(_updateAnnons);
+
+      Timer(
+        Duration(milliseconds: 250),
+        () async {
+          widget.appState.fetchProfile(_updateProfile);
+        },
+      );
+
+      widget.appState.fetchAnnouncements(_updateAnnons);
     }
   }
 
@@ -89,8 +96,6 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void _updateProfile(Profile newProf) {
-    p('from here prof');
-    inspect(newProf);
     setState(
       () {
         widget.appState.prof = newProf;

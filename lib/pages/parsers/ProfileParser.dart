@@ -138,10 +138,12 @@ class ProfileParser {
       alias: profile['alias'],
       owns: profile['owns'],
       tiles: profile['tiles'],
-      netWorth: profile['netWorth'],
+      netWorth: profile['networth'],
       netProfit: profile['netProfit'],
       netProfitPercent: profile['netProfitPercent'],
     );
+
+    p('NETWORK PROF: ' + prof.netWorth.toString());
 
     await doParseProperties(controller, updateProfile);
   }
@@ -274,7 +276,7 @@ class ProfileParser {
             id: prop['id'],
             thumbnail: prop['thumbnail'],
             link: prop['link'],
-            description: prop['description'],
+            description: prop['desc'],
             price: prop['price'],
             tradeValue: prop['tradeValue'],
             tiles: prop['tiles'],

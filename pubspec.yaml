@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.16.1
   puppeteer: 2.0.0
   universal_io: ^2.0.3
+  flutter_svg: ^0.19.3
 
 flutter_icons:
   image_path: 'lib/assets/icon.png'

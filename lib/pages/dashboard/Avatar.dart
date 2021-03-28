@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
+import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
 
 class Avatar extends StatefulWidget {
   String avatar = '';
@@ -19,30 +20,32 @@ Widget _renderAvatarImage(widget, avatarSize) {
 
   double imageWidth = 100;
 
-  return Container(
-    padding: EdgeInsets.all(3.0),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(imageWidth / 2),
+  if (!regExp.hasMatch(widget.avatar)) {
+    return Container(
+      padding: EdgeInsets.all(3.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(30.0),
-        child: Image.network(
-          widget.avatar,
-          height: 80,
-          fit: BoxFit.fill,
+        borderRadius: BorderRadius.circular(imageWidth / 2),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30.0),
+          child: Image.network(
+            widget.avatar,
+            height: 80,
+            fit: BoxFit.fill,
+          ),
         ),
       ),
+    );
+  }
+
+  return SvgPicture.network(
+    widget.avatar,
+    semanticsLabel: 'Avatar',
+    width: avatarSize,
+    placeholderBuilder: (BuildContext context) => Container(
+      padding: EdgeInsets.all(3.0),
+      child: CircularProgressIndicator(),
     ),
   );
-
-//   return SvgPicture.network(
-//     widget.avatar,
-//     semanticsLabel: 'Avatar',
-//     width: avatarSize,
-//     placeholderBuilder: (BuildContext context) => Container(
-//       padding: EdgeInsets.all(3.0),
-//       child: CircularProgressIndicator(),
-//     ),
-//   );
 }
 
 class _AvatarState extends State<Avatar> {
