@@ -1,9 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:MyE2/pages/classes/globals.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'Property.dart';
 
 class Profile {

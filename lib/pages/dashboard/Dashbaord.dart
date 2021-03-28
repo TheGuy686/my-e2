@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:MyE2/main.dart';
-import 'package:MyE2/pages/classes/globals.dart';
 import 'package:MyE2/pages/dashboard/subpages/PropertyDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer';
 
 import 'dart:async';
 import 'package:MyE2/pages/dashboard/Avatar.dart';
@@ -349,13 +346,13 @@ class _DashboardState extends State<Dashboard> {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () async {
-              //   await Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (BuildContext context) =>
-              //           SettingsPage(appState: widget.appState),
-              //     ),
-              //   );
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      SettingsPage(appState: widget.appState),
+                ),
+              );
 
               _updatePageState();
             },
