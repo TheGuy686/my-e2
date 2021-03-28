@@ -150,64 +150,63 @@ class AppState {
 
     print('UPDATING PROFILE');
 
-    await ProfileParser.parseFromPage(settings['profileId'], updateProfile);
-
-    return;
-
     String shaKay = sha1.convert(key).toString();
 
     String profilleCache = prefs.getString(shaKay);
-
-    print(profilleCache);
 
     if (profilleCache != null) {
       updateProfile(Profile.fromJson(jsonDecode(profilleCache)));
     }
 
-    if (profileUpdatedInLast15Min() &&
-        profilleCache != null &&
-        profilleCache != '') {
-      p('protedted against network bombardment');
-      return;
-    }
-
     try {
-      Uri url = Uri.https(
-        API_HOST,
-        '/user/profile',
-        {
-          'profileId': settings['profileId'],
-        },
-      );
-
-      print('fetching profile: ');
-
-      print(url);
-
-      final response = await http.get(
-        url,
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer ${idToken}',
-          HttpHeaders.contentTypeHeader: "application/json",
-        },
-      );
-
-      if (response.statusCode == 200) {
-        await prefs.setString(shaKay, response.body.toString());
-
-        updateProfile(Profile.fromJson(jsonDecode(response.body)));
-
-        (() async {
-          await prefs.setString(
-            shaKay + '-last-profile-updated-ts',
-            DateTime.now().millisecondsSinceEpoch.toString(),
-          );
-        })();
-      } else {
-        throw Exception('Filated to get profile: ' + response.body.toString());
-      }
+      await ProfileParser.parseFromPage(settings['profileId'], updateProfile);
     } catch (e) {
-      print('PROFILE ERROR: ' + e.toString());
+      if (profileUpdatedInLast15Min() &&
+          profilleCache != null &&
+          profilleCache != '') {
+        p('protedted against network bombardment');
+        return;
+      }
+
+      try {
+        Uri url = Uri.https(
+          API_HOST,
+          '/user/profile',
+          {
+            'profileId': settings['profileId'],
+          },
+        );
+
+        print('fetching profile: ');
+
+        print(url);
+
+        final response = await http.get(
+          url,
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${idToken}',
+            HttpHeaders.contentTypeHeader: "application/json",
+          },
+        );
+
+        if (response.statusCode == 200) {
+          await prefs.setString(shaKay, response.body.toString());
+
+          updateProfile(Profile.fromJson(jsonDecode(response.body)));
+
+          (() async {
+            await prefs.setString(
+              shaKay + '-last-profile-updated-ts',
+              DateTime.now().millisecondsSinceEpoch.toString(),
+            );
+          })();
+        } else {
+          throw Exception(
+              'Filated to get profile: ' + response.body.toString());
+        }
+      } catch (e) {
+        print('PROFILE ERROR: ' + e.toString());
+      }
     }
   }
 
