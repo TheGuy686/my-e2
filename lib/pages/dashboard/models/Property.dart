@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:MyE2/pages/classes/globals.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'Location.dart';
 
@@ -26,14 +25,25 @@ class Property {
     this.location,
   });
 
-  factory Property.fromJson(Map<dynamic, dynamic> json) {
-    p('JSON PROPERTY ' + json.toString());
+  Map<String, dynamic> toJson() {
+    return {
+      'id': this.id,
+      'thumbnail': this.thumbnail,
+      'link': this.link,
+      'description': this.description,
+      'price': price,
+      'tradeValue': this.tradeValue,
+      'tiles': this.tiles,
+      'loc': this.location.toJson(),
+    };
+  }
 
+  factory Property.fromJson(Map<dynamic, dynamic> json) {
     return Property(
       id: json['id'],
       thumbnail: json['thumbnail'],
       link: json['link'],
-      description: json['desc'],
+      description: json['description'],
       price: json['price'],
       tradeValue: json['tradeValue'],
       tiles: json['tiles'],

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:MyE2/pages/classes/globals.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'Property.dart';
@@ -40,5 +41,27 @@ class Profile {
         .forEach((k, v) => prof.properties.add(Property.fromJson(v)));
 
     return prof;
+  }
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> props = {};
+
+    properties.forEach(
+      (prop) {
+        props[prop.id] = prop.toJson();
+      },
+    );
+
+    return {
+      'info': {
+        'avatar': this.avatar,
+        'alias': this.alias,
+        'owns': this.owns,
+        'tiles': this.tiles,
+        'networth': this.netWorth,
+        'netProfitPercent': this.netProfitPercent,
+      },
+      'properties': props
+    };
   }
 }

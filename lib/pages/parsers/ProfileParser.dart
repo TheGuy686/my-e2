@@ -143,8 +143,6 @@ class ProfileParser {
       netProfitPercent: profile['netProfitPercent'],
     );
 
-    p('NETWORK PROF: ' + prof.netWorth.toString());
-
     await doParseProperties(controller, updateProfile);
   }
 
@@ -209,7 +207,7 @@ class ProfileParser {
 
     match = re.firstMatch(html);
 
-    prop['desc'] = match.group(1);
+    prop['description'] = match.group(1);
 
     re = new RegExp(
       r'<div class="price">.*?([0-9\.]+).*?<span class="trade-value">.*<i class="material-icons">layers<\/i>.*?([0-9\.]+).*?<\/span>',
@@ -276,7 +274,7 @@ class ProfileParser {
             id: prop['id'],
             thumbnail: prop['thumbnail'],
             link: prop['link'],
-            description: prop['desc'],
+            description: prop['description'],
             price: prop['price'],
             tradeValue: prop['tradeValue'],
             tiles: prop['tiles'],

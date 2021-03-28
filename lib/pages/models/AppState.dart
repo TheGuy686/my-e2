@@ -5,7 +5,6 @@ import 'dart:io';
 
 import 'package:MyE2/pages/classes/ConnectionStatus.dart';
 import 'package:MyE2/pages/classes/globals.dart';
-import 'package:MyE2/pages/models/Onboarding.dart';
 import 'package:MyE2/pages/parsers/ProfileParser.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:MyE2/pages/dashboard/models/Announcements.dart';
@@ -123,10 +122,6 @@ class AppState {
         },
       );
 
-      print('fetching settings: ');
-
-      print(url);
-
       final response = await http.get(
         url,
         headers: {
@@ -159,7 +154,13 @@ class AppState {
     }
 
     try {
-      await ProfileParser.parseFromPage(settings['profileId'], updateProfile);
+      await ProfileParser.parseFromPage(
+        settings['profileId'],
+        updateProfile,
+      );
+
+      await prefs.remove(shaKay);
+      await prefs.setString(shaKay, jsonEncode(prof.toJson()));
     } catch (e) {
       if (profileUpdatedInLast15Min() &&
           profilleCache != null &&
@@ -190,6 +191,7 @@ class AppState {
         );
 
         if (response.statusCode == 200) {
+          await prefs.remove(shaKay);
           await prefs.setString(shaKay, response.body.toString());
 
           updateProfile(Profile.fromJson(jsonDecode(response.body)));

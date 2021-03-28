@@ -248,9 +248,9 @@ class _DashboardState extends State<Dashboard> {
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(0, 6, 0, 6),
                           child: Text(
-                            prop.description.length > 18
+                            prop.description.toString().length > 18
                                 ? prop.description.substring(0, 18) + '...'
-                                : prop.description,
+                                : prop.description.toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
