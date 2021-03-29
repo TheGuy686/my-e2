@@ -1,12 +1,20 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:MyE2/pages/classes/globals.dart';
+import 'package:MyE2/utils/Endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:MyE2/pages/MainTabNavigation.dart';
 import 'package:MyE2/pages/models/AppState.dart';
 import 'package:MyE2/pages/models/Onboarding.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slide_popup_dialog/slide_popup_dialog.dart' as slideDialog;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class LoginForm extends StatefulWidget {
   AppState appState;
@@ -22,6 +30,26 @@ class LoginForm extends StatefulWidget {
 
 final RoundedLoadingButtonController _btnLoginController =
     new RoundedLoadingButtonController();
+
+void _navigateToHome(context, widget) {
+  Timer(
+    Duration(milliseconds: 1350),
+    () async {
+      _btnLoginController.reset();
+
+      await widget.appState.initSettings();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => MainTabNavigation(
+            appState: widget.appState,
+          ),
+        ),
+      );
+    },
+  );
+}
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
@@ -45,6 +73,7 @@ class _LoginFormState extends State<LoginForm> {
         widget.appState.initSettings();
 
         setState(() => {isLoggingIn = false});
+
         _btnLoginController.success();
 
         Timer(
@@ -54,23 +83,7 @@ class _LoginFormState extends State<LoginForm> {
           },
         );
 
-        Timer(
-          Duration(milliseconds: 1350),
-          () async {
-            _btnLoginController.reset();
-
-            await widget.appState.initSettings();
-
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => MainTabNavigation(
-                  appState: widget.appState,
-                ),
-              ),
-            );
-          },
-        );
+        _navigateToHome(context, widget);
       },
       (String error) {
         setState(() => {isLoggingIn = false});
@@ -99,8 +112,65 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _showDialog(url) {
+    slideDialog.showSlideDialog(
+      context: context,
+      barrierColor: Colors.white.withOpacity(0.7),
+      pillColor: Colors.blue,
+      backgroundColor: Colors.white,
+      child: Expanded(
+        child: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: url,
+          onPageStarted: (String url) async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+
+            try {
+              RegExp re = RegExp(
+                r'access_token=(.*?)&',
+                caseSensitive: false,
+              );
+
+              var match = re.firstMatch(url);
+
+              String accessToken = match.group(1);
+
+              re = RegExp(
+                r'id_token=(.*?)&',
+                caseSensitive: false,
+              );
+
+              String idToken = match.group(1);
+
+              re = RegExp(
+                r'refresh_token=(.*?)&',
+                caseSensitive: false,
+              );
+
+              String refreshToken = match.group(1);
+
+              await prefs.setString('refresh_token', refreshToken);
+              await prefs.setString('id_token', idToken);
+              await prefs.setString('access_token', accessToken);
+
+              Onboarding.finalizeSession(
+                widget.appState,
+                () {
+                  widget.appState.initSettings();
+
+                  setState(() => {isLoggingIn = false});
+
+                  _navigateToHome(context, widget);
+                },
+              );
+            } catch (e) {}
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _loginContent() {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -135,7 +205,6 @@ class _LoginFormState extends State<LoginForm> {
                           child: Column(
                             children: <Widget>[
                               TextFormField(
-                                // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'Please enter an email';
@@ -166,7 +235,6 @@ class _LoginFormState extends State<LoginForm> {
                               SizedBox(height: 20),
                               TextFormField(
                                 obscureText: true,
-                                // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'Please enter a password';
@@ -241,8 +309,26 @@ class _LoginFormState extends State<LoginForm> {
                                       controller: _btnLoginController,
                                       onPressed: _loginBtnClicked,
                                     ),
-                                  )
+                                  ),
                                 ],
+                              ),
+                              SizedBox(height: 20),
+                              Center(
+                                child: Text(
+                                  'Or',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              SignInButton(
+                                Buttons.Facebook,
+                                onPressed: () async {
+                                  _showDialog(SOCIAL_LOGIN);
+                                },
                               ),
                             ],
                           ),
@@ -257,5 +343,10 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _loginContent();
   }
 }

@@ -70,11 +70,7 @@ class Onboarding {
           await prefs.setString(k, v);
         });
 
-        print('logged in successfully');
-
-        successCb();
-
-        initRefreshToken(appState);
+        finalizeSession(appState, successCb);
       } else {
         if (json['message'] == 'Authentication failed') {
           errorCb('Username or Password was wrong');
@@ -176,5 +172,13 @@ class Onboarding {
       inspect(e);
       errorCb(e.toString());
     }
+  }
+
+  static void finalizeSession(AppState appState, Function successCb) {
+    print('Session successfully finalized');
+
+    successCb();
+
+    initRefreshToken(appState);
   }
 }

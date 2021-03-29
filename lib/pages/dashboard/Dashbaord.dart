@@ -30,7 +30,7 @@ String formatNumber(dynamic num) {
     return num.toString();
   }
 
-  var f = NumberFormat("###,###,###,###.0#", "en_US");
+  var f = NumberFormat("###,###,###,###.##", "en_US");
   return f.format(num);
 }
 
@@ -73,12 +73,7 @@ class _DashboardState extends State<Dashboard> {
         },
       );
 
-      Timer(
-        Duration(milliseconds: 250),
-        () async {
-          widget.appState.fetchProfile(_updateProfile);
-        },
-      );
+      widget.appState.fetchProfile(_updateProfile);
 
       widget.appState.fetchAnnouncements(_updateAnnons);
     }
@@ -92,13 +87,15 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  void _updateProfile(Profile newProf) {
+  Profile _updateProfile(Profile newProf) {
     setState(
       () {
         widget.appState.prof = newProf;
         isLoading = false;
       },
     );
+
+    return newProf;
   }
 
   Widget _renderAnnons() {
@@ -338,204 +335,212 @@ class _DashboardState extends State<Dashboard> {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashbaord'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: 'Settings',
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      SettingsPage(appState: widget.appState),
-                ),
-              );
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Dashbaord'),
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Settings',
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        SettingsPage(appState: widget.appState),
+                  ),
+                );
 
-              _updatePageState();
-            },
-          ),
-        ],
-      ),
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Positioned(
-            left: -(screenWidth * 1.05),
-            top: -(screenWidth),
-            child: Transform.rotate(
-              angle: 158.9,
-              child: Opacity(
-                opacity: bgOpacity,
-                child: Image(
-                  image: AssetImage('lib/assets/earth2-blue.png'),
-                  width: 1000,
+                _updatePageState();
+              },
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            Positioned(
+              left: -(screenWidth * 1.05),
+              top: -(screenWidth),
+              child: Transform.rotate(
+                angle: 158.9,
+                child: Opacity(
+                  opacity: bgOpacity,
+                  child: Image(
+                    image: AssetImage('lib/assets/earth2-blue.png'),
+                    width: 1000,
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            left: -(screenWidth / 5),
-            top: (screenHeight * 0.25),
-            child: Transform.rotate(
-              angle: 25.2,
-              child: Opacity(
-                opacity: bgOpacity,
-                child: Image(
-                  image: AssetImage('lib/assets/earth2-blue.png'),
-                  width: 1000,
+            Positioned(
+              left: -(screenWidth / 5),
+              top: (screenHeight * 0.25),
+              child: Transform.rotate(
+                angle: 25.2,
+                child: Opacity(
+                  opacity: bgOpacity,
+                  child: Image(
+                    image: AssetImage('lib/assets/earth2-blue.png'),
+                    width: 1000,
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(5, 11, 5, 8),
-            child: CustomScrollView(
-              primary: false,
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      _renderAnnons(),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 3,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Avatar(avatar: widget.appState.prof.avatar),
-                          Card(
-                            elevation: 4,
-                            child: Container(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 7, 10, 7),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.appState.prof.alias,
+            Padding(
+              padding: EdgeInsets.fromLTRB(5, 11, 5, 8),
+              child: CustomScrollView(
+                primary: false,
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        _renderAnnons(),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 3,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Avatar(avatar: widget.appState.prof.avatar),
+                            Card(
+                              elevation: 4,
+                              child: Container(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.appState.prof.alias,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 23,
+                                        ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Owns ',
+                                          style: TextStyle(color: Colors.black),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: formatNumber(
+                                                widget.appState.prof.owns,
+                                              ),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(text: ' properties'),
+                                          ],
+                                        ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Made up of ',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: formatNumber(
+                                                widget.appState.prof.tiles,
+                                              ),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(text: ' tiles'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Net Worth ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.5,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          '${e2Cur} ${formatNumber(widget.appState.prof.netWorth)}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 23,
-                                      ),
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: 'Owns ',
-                                        style: TextStyle(color: Colors.black),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: formatNumber(
-                                              widget.appState.prof.owns,
-                                            ),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextSpan(text: ' properties'),
-                                        ],
-                                      ),
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: 'Made up of ',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: formatNumber(
-                                              widget.appState.prof.tiles,
-                                            ),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextSpan(text: ' tiles'),
-                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Property Value Increase ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.5,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          '${e2Cur} ${formatNumber(widget.appState.prof.netProfit)} (${formatNumber(widget.appState.prof.netProfitPercent)}%)',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    child: Card(
-                      elevation: 4,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: 'Net Worth ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.5,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text:
-                                        '${e2Cur} ${formatNumber(widget.appState.prof.netWorth)}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: 'Property Value Increase ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.5,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text:
-                                        '${e2Cur} ${formatNumber(widget.appState.prof.netProfit)} (${formatNumber(widget.appState.prof.netProfitPercent)}%)',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
                   ),
-                ),
-                SliverAppBar(
-                  pinned: true,
-                  snap: false,
-                  floating: false,
-                  expandedHeight: 140.0,
-                  flexibleSpace: const FlexibleSpaceBar(
-                    title: Text('Properties'),
-                    centerTitle: false,
+                  SliverAppBar(
+                    pinned: true,
+                    snap: false,
+                    floating: false,
+                    expandedHeight: 140.0,
+                    automaticallyImplyLeading: false,
+                    flexibleSpace: const FlexibleSpaceBar(
+                      title: Text('Properties'),
+                      centerTitle: false,
+                    ),
                   ),
-                ),
-                _renderConnectionStatus(),
-                _renderGrid(),
-              ],
+                  _renderConnectionStatus(),
+                  _renderGrid(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

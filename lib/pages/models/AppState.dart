@@ -140,6 +140,16 @@ class AppState {
     } catch (e) {}
   }
 
+  void _storeProfileState(key, Profile newProfile) async {
+    await prefs.remove(key);
+    await prefs.setString(
+      key,
+      jsonEncode(
+        newProfile.toJson(),
+      ),
+    );
+  }
+
   Future fetchProfile(updateProfile) async {
     var key = utf8.encode(email);
 
@@ -156,11 +166,11 @@ class AppState {
     try {
       await ProfileParser.parseFromPage(
         settings['profileId'],
-        updateProfile,
+        (newProfile) {
+          updateProfile(newProfile);
+          _storeProfileState(shaKay, newProfile);
+        },
       );
-
-      await prefs.remove(shaKay);
-      await prefs.setString(shaKay, jsonEncode(prof.toJson()));
     } catch (e) {
       if (profileUpdatedInLast15Min() &&
           profilleCache != null &&
@@ -191,10 +201,11 @@ class AppState {
         );
 
         if (response.statusCode == 200) {
-          await prefs.remove(shaKay);
-          await prefs.setString(shaKay, response.body.toString());
+          Profile newProf = Profile.fromJson(jsonDecode(response.body));
 
-          updateProfile(Profile.fromJson(jsonDecode(response.body)));
+          _storeProfileState(shaKay, newProf);
+
+          updateProfile(newProf);
 
           (() async {
             await prefs.setString(

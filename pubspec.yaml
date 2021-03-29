@@ -41,6 +41,8 @@ dependencies:
   puppeteer: 2.0.0
   universal_io: ^2.0.3
   flutter_svg: ^0.19.3
+  flutter_signin_button: ^1.1.0
+  slide_popup_dialog: ^0.0.2
 
 flutter_icons:
   image_path: 'lib/assets/icon.png'

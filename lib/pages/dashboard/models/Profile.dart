@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'Property.dart';
 
 class Profile {
@@ -21,6 +23,7 @@ class Profile {
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
+    inspect(json);
     Profile prof = Profile(
       avatar: json['info']['avatar'],
       alias: json['info']['alias'],
@@ -53,6 +56,7 @@ class Profile {
         'owns': this.owns,
         'tiles': this.tiles,
         'networth': this.netWorth,
+        'netProfit': this.netProfit,
         'netProfitPercent': this.netProfitPercent,
       },
       'properties': props
